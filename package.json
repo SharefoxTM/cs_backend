@@ -1,0 +1,28 @@
+{
+	"name": "cs_backend",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./src/index.ts",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node src/server.ts",
+		"dev": "nodemon src/server.ts"
+	},
+	"author": "Glenn",
+	"license": "ISC",
+	"dependencies": {
+		"ajv": "^8.12.0",
+		"ajv-formats": "^2.1.1",
+		"axios": "^1.6.2",
+		"cors": "^2.8.5",
+		"dotenv": "^16.3.1",
+		"express": "^4.18.2",
+		"nodemon": "^3.0.1",
+		"ts-node": "^10.9.1"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.21",
+		"@types/node": "^20.9.0",
+		"typescript": "^5.2.2"
+	}
+}
