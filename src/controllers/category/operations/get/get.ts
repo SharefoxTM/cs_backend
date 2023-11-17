@@ -1,9 +1,24 @@
 import { Handler } from "express";
+import { urlCategory } from "../../resources";
+import { AxiosResponse } from "axios";
+import { APICategory } from "../../../../models/Category.model";
 
 const axios = require("axios");
-const url = process.env.DB_HOST + "/api/part/category/";
 
-export const getCategory: Handler = async (req, res) => {
-	const response = await axios(url);
-	console.log(response.data);
+export const getCategory: Handler = (req, res, next) => {
+	if (!req.params.id) {
+		throw new Error("Invalid id");
+	}
+	axios
+		.get(urlCategory + `${req.params.id}/`, {
+			headers: {
+				Authorization: process.env.DB_TOKEN,
+			},
+		})
+		.then((response: AxiosResponse<APICategory>) => {
+			return response.data;
+		})
+		.then((response: APICategory) => {
+			res.json(response);
+		});
 };

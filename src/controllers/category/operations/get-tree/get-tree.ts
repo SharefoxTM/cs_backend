@@ -3,9 +3,9 @@ import { CategoryTree } from "../../../../models/CategoryTree.model";
 import { APICategory } from "../../../../models/Category.model";
 import Map from "../../../../helpers/mapItems";
 import axios, { AxiosResponse } from "axios";
+import { urlCategory } from "../../resources";
 
 require("dotenv").config();
-
 const buildTree = (nodes: APICategory, parent: number | null): APICategory => {
 	return nodes
 		.filter((node) => node.parent === parent)
@@ -15,10 +15,9 @@ const buildTree = (nodes: APICategory, parent: number | null): APICategory => {
 		});
 };
 
-const url = process.env.DB_HOST + "/api/part/category/";
 const getCategories = async (): Promise<APICategory> => {
 	const data = await axios
-		.get(url, {
+		.get(urlCategory, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
 			},
