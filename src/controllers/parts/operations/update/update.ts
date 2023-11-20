@@ -1,6 +1,6 @@
 import { Handler } from "express";
 import Map from "../../../../helpers/mapItems";
-import { createURL, urlPart } from "../../resources";
+import { urlPart } from "../../resources";
 import { APIPart } from "../../../../models/APIPart.model";
 import { AxiosResponse } from "axios";
 
