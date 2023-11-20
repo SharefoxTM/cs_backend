@@ -8,6 +8,7 @@ export const PartRouter = Router();
 PartRouter.route("/").get(PartController.getAllParts);
 //.post(PartController.createCategory);
 
-PartRouter.route("/:id").get(PartController.getPart);
-// 	.put(PartController.updateCategory)
+PartRouter.route("/:id")
+	.get(PartController.getPart)
+	.put(PartController.updatePart);
 // 	.delete(PartController.deleteCategory);
