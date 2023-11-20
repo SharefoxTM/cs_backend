@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import { urlPart } from "../../resources";
 import { AxiosResponse } from "axios";
-import { APIPart } from "../../../../models/Part.model";
+import { APIPart } from "../../../../models/APIPart.model";
 
 const axios = require("axios");
 require("dotenv").config();

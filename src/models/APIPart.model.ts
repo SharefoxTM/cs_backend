@@ -1,4 +1,4 @@
-export type Part = {
+export type APIPart = {
 	active: boolean;
 	assembly: boolean;
 	barcode_hash: string;
@@ -13,13 +13,17 @@ export type Part = {
 	IPN: string;
 	is_template: boolean;
 	keywords: string;
+	last_stocktake: string;
+	link: string;
 	minimum_stock: number;
 	name: string;
+	notes: string;
 	pk: number;
 	purchaseable: boolean;
 	revision: string;
 	salable: boolean;
 	starred: string;
+	thumbnail: string;
 	trackable: boolean;
 	units: string;
 	variant_of: number;

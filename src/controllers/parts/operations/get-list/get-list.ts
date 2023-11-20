@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Handler, response } from "express";
-import { APIPart } from "../../../../models/Part.model";
+import { APIPart } from "../../../../models/APIPart.model";
 import { createURL, urlPart } from "../../resources";
 import { PartQuery } from "../../../../models/PartQuery.model";
 import Map from "../../../../helpers/mapItems";
@@ -22,6 +22,6 @@ export const getAllParts: Handler = (req, res, next) => {
 			return response.data;
 		})
 		.then((response: APIPart) => {
-			res.json(response);
+			res.json(Map.mapPart(response));
 		});
 };

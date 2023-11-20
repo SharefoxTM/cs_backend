@@ -2,6 +2,8 @@ import { Request } from "express";
 import { APICategory } from "../models/Category.model";
 import { CategoryTree } from "../models/CategoryTree.model";
 import { PartQuery } from "../models/PartQuery.model";
+import { Part } from "../models/Part.model";
+import { APIPart } from "../models/APIPart.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -124,7 +126,52 @@ const mapQuery = (req: Request): PartQuery => {
 	return mappedQuery;
 };
 
+const mapPart = (apiParts: APIPart): Part => {
+	const parts: Part = apiParts.map((part) => ({
+		active: part.active,
+		assembly: part.assembly,
+		barcode_hash: part.barcode_hash,
+		category: part.category,
+		component: part.component,
+		default_expiry: part.default_expiry,
+		default_location: part.default_location,
+		default_supplier: part.default_location,
+		description: part.description,
+		full_name: part.full_name,
+		image: part.image,
+		IPN: part.IPN,
+		is_template: part.is_template,
+		keywords: part.keywords,
+		minimum_stock: part.minimum_stock,
+		name: part.name,
+		pk: part.pk,
+		purchaseable: part.purchaseable,
+		revision: part.revision,
+		salable: part.salable,
+		starred: part.starred,
+		trackable: part.trackable,
+		units: part.units,
+		variant_of: part.variant_of,
+		virtual: part.virtual,
+		responsible: part.responsible,
+		allocated_to_build_orders: part.allocated_to_build_orders,
+		allocated_to_sales_orders: part.allocated_to_sales_orders,
+		building: part.building,
+		in_stock: part.in_stock,
+		ordering: part.ordering,
+		required_for_build_orders: part.required_for_build_orders,
+		stock_item_count: part.stock_item_count,
+		suppliers: part.suppliers,
+		total_in_stock: part.total_in_stock,
+		unallocated_stock: part.unallocated_stock,
+		variant_stock: part.variant_stock,
+		tags: part.tags,
+	}));
+	return parts;
+};
+
 export default {
 	mapTree,
 	mapQuery,
+	mapPart,
 };
