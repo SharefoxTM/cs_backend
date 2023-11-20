@@ -1,8 +1,7 @@
 import { AxiosResponse } from "axios";
-import { Handler, response } from "express";
+import { Handler } from "express";
 import { APIPart } from "../../../../models/APIPart.model";
-import { createURL, urlPart } from "../../resources";
-import { PartQuery } from "../../../../models/PartQuery.model";
+import { createURL } from "../../resources";
 import Map from "../../../../helpers/mapItems";
 
 const axios = require("axios");
@@ -22,6 +21,7 @@ export const getAllParts: Handler = (req, res, next) => {
 			return response.data;
 		})
 		.then((response: APIPart) => {
+			res.header("Access-Control-Allow-Origin", "*");
 			res.json(Map.mapPart(response));
 		});
 };

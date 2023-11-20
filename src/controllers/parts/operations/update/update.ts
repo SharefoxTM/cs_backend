@@ -19,6 +19,7 @@ export const updatePart: Handler = (req, res, next) => {
 			return response.data;
 		})
 		.then((response: APIPart) => {
+			res.header("Access-Control-Allow-Origin", "*");
 			res.json(Map.mapPart(response));
 		});
 };

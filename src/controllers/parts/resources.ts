@@ -1,6 +1,11 @@
+import { AxiosResponse } from "axios";
+import { APIPart } from "../../models/APIPart.model";
 import { PartQuery } from "../../models/PartQuery.model";
 
 export const urlPart = process.env.DB_HOST + "/api/part/";
+
+const axios = require("axios");
+require("dotenv").config();
 
 export function createURL(query: PartQuery): string {
 	let queriedUrl = urlPart;

@@ -32,6 +32,7 @@ export const getCategoryTree: Handler = async (req, res, next) => {
 	try {
 		const categories: APICategory = await getCategories();
 		const tree: CategoryTree = Map.mapTree(buildTree(categories, null));
+		res.header("Access-Control-Allow-Origin", "*");
 		res.json(tree);
 	} catch {
 		console.log(`Error: ${response.statusCode}`);

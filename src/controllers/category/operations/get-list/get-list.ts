@@ -17,6 +17,7 @@ export const getAllCategories: Handler = (req, res, next) => {
 			return response.data;
 		})
 		.then((response: APICategory) => {
+			res.header("Access-Control-Allow-Origin", "*");
 			res.json(response);
 		});
 };
