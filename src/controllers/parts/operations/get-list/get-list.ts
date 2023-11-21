@@ -7,11 +7,16 @@ import Map from "../../../../helpers/mapItems";
 const axios = require("axios");
 require("dotenv").config();
 
-export const getAllParts: Handler = (req, res, next) => {
+export const getAllParts: Handler = async (req, res, next) => {
 	const query = Map.mapQuery(req);
+	console.log(query);
+	console.log(req.query);
 	const url = createURL(query);
-
-	axios
+	const page = parseInt(req.query.page?.toString() || "0") + 1;
+	const pageSize = parseInt(req.query.pageSize?.toString() || "25");
+	const startIndex = (page - 1) * pageSize;
+	const endIndex = page * pageSize;
+	const parts: APIPart = await axios
 		.get(url, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
@@ -21,7 +26,12 @@ export const getAllParts: Handler = (req, res, next) => {
 			return response.data;
 		})
 		.then((response: APIPart) => {
-			res.header("Access-Control-Allow-Origin", "*");
-			res.json(Map.mapPart(response));
+			return Map.mapPart(response);
 		});
+	// console.log(parts);
+	const paginatedParts = parts.slice(startIndex, endIndex);
+	const totalPages = Math.ceil(parts.length / pageSize);
+
+	res.header("Access-Control-Allow-Origin", "*");
+	res.json({ data: paginatedParts, totalPages });
 };

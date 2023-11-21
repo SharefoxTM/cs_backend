@@ -21,31 +21,6 @@ const getPartImgURL = async (id: string): Promise<string> => {
 	return part.image;
 };
 
-// export const getImage: Handler = async (req, res, next) => {
-// 	if (!req.params.id) {
-// 		res.status(400).json("no ID found!");
-// 	}
-
-// 	res.header("Access-Control-Allow-Origin", "*");
-// 	res.type("img/jpeg");
-// 	const img = await getPartImgURL(req.params.id);
-// 	if (!img) {
-// 		res.send("");
-// 	} else {
-// 		const url = process.env.DB_HOST + img;
-
-// 		const image = await axios
-// 			.get(url, {
-// 				headers: {
-// 					Authorization: process.env.DB_TOKEN,
-// 				},
-// 			})
-// 			.then((response: AxiosResponse<Blob>) => {
-// 				return response.data;
-// 			});
-// 		res.send(image);
-// 	}
-// };
 export const getImage: Handler = async (req, res, next) => {
 	if (!req.params.id) {
 		return res.status(400).json({ error: "No ID found!" });
