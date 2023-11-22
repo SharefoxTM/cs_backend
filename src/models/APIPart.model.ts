@@ -41,4 +41,4 @@ export type APIPart = {
 	unallocated_stock: number;
 	variant_stock: number;
 	tags: string[];
-}[];
+};

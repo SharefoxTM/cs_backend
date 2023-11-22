@@ -126,8 +126,52 @@ const mapQuery = (req: Request): PartQuery => {
 	return mappedQuery;
 };
 
-const mapPart = (apiParts: APIPart): Part => {
-	const parts: Part = apiParts.map((part) => ({
+const mapPart = (apiPart: APIPart): Part => {
+	const parts: Part = {
+		active: apiPart.active,
+		assembly: apiPart.assembly,
+		barcode_hash: apiPart.barcode_hash,
+		category: apiPart.category,
+		component: apiPart.component,
+		default_expiry: apiPart.default_expiry,
+		default_location: apiPart.default_location,
+		default_supplier: apiPart.default_location,
+		description: apiPart.description,
+		full_name: apiPart.full_name,
+		image: apiPart.image,
+		IPN: apiPart.IPN,
+		is_template: apiPart.is_template,
+		keywords: apiPart.keywords,
+		minimum_stock: apiPart.minimum_stock,
+		name: apiPart.name,
+		pk: apiPart.pk,
+		purchaseable: apiPart.purchaseable,
+		revision: apiPart.revision,
+		salable: apiPart.salable,
+		starred: apiPart.starred,
+		trackable: apiPart.trackable,
+		units: apiPart.units,
+		variant_of: apiPart.variant_of,
+		virtual: apiPart.virtual,
+		responsible: apiPart.responsible,
+		allocated_to_build_orders: apiPart.allocated_to_build_orders,
+		allocated_to_sales_orders: apiPart.allocated_to_sales_orders,
+		building: apiPart.building,
+		in_stock: apiPart.in_stock,
+		ordering: apiPart.ordering,
+		required_for_build_orders: apiPart.required_for_build_orders,
+		stock_item_count: apiPart.stock_item_count,
+		suppliers: apiPart.suppliers,
+		total_in_stock: apiPart.total_in_stock,
+		unallocated_stock: apiPart.unallocated_stock,
+		variant_stock: apiPart.variant_stock,
+		tags: apiPart.tags,
+	};
+	return parts;
+};
+
+const mapParts = (apiParts: APIPart[]): Part[] => {
+	const parts: Part[] = apiParts.map((part) => ({
 		active: part.active,
 		assembly: part.assembly,
 		barcode_hash: part.barcode_hash,
@@ -174,4 +218,5 @@ export default {
 	mapTree,
 	mapQuery,
 	mapPart,
+	mapParts,
 };

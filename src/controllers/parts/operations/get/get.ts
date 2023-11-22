@@ -2,6 +2,7 @@ import { Handler } from "express";
 import { urlPart } from "../../resources";
 import { AxiosResponse } from "axios";
 import { APIPart } from "../../../../models/APIPart.model";
+import Map from "../../../../helpers/mapItems";
 
 const axios = require("axios");
 require("dotenv").config();
@@ -22,6 +23,6 @@ export const getPart: Handler = (req, res, next) => {
 		})
 		.then((response: APIPart) => {
 			res.header("Access-Control-Allow-Origin", "*");
-			res.json(response);
+			res.json(Map.mapPart(response));
 		});
 };

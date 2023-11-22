@@ -37,4 +37,4 @@ export type Part = {
 	unallocated_stock: number;
 	variant_stock: number;
 	tags: string[];
-}[];
+};
