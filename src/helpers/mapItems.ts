@@ -4,6 +4,8 @@ import { CategoryTree } from "../models/CategoryTree.model";
 import { PartQuery } from "../models/PartQuery.model";
 import { Part } from "../models/Part.model";
 import { APIPart } from "../models/APIPart.model";
+import { APIPartStock } from "../models/APIPartStock.model";
+import { PartStock } from "../models/PartStock.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -214,9 +216,40 @@ const mapParts = (apiParts: APIPart[]): Part[] => {
 	return parts;
 };
 
+const mapPartStock = (apiPartStock: APIPartStock[]): PartStock[] => {
+	const mappedStock: PartStock[] = apiPartStock.map((stock) => ({
+		allocated: stock.allocated,
+		barcode_hash: stock.barcode_hash,
+		batch: stock.batch,
+		build: stock.build,
+		expired: stock.expired,
+		expiry_date: stock.expiry_date,
+		installed_items: stock.installed_items,
+		is_building: stock.is_building,
+		link: stock.link,
+		location: stock.location,
+		packaging: stock.packaging,
+		part: stock.part,
+		pk: stock.pk,
+		purchase_price: stock.purchase_price,
+		purchase_price_currency: stock.purchase_price_currency,
+		quantity: stock.quantity,
+		serial: stock.serial,
+		stale: stock.stale,
+		status: stock.status,
+		status_text: stock.status_text,
+		supplier_part: stock.supplier_part,
+		tags: stock.tags,
+		tracking_items: stock.tracking_items,
+		updated: stock.updated,
+	}));
+	return mappedStock;
+};
+
 export default {
 	mapTree,
 	mapQuery,
 	mapPart,
 	mapParts,
+	mapPartStock,
 };
