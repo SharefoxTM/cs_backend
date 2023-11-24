@@ -30,15 +30,14 @@ export const getImage: Handler = async (req, res, next) => {
 	res.type("img/jpeg");
 	try {
 		const url = process.env.DB_HOST + `/media/part_images/${req.params.id}`;
-		console.log(url);
 		const response = await axios.get(url, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
 			},
-			responseType: "stream", // Stream the response
+			responseType: "stream",
 		});
 
-		response.data.pipe(res); // Stream the image directly to the response
+		response.data.pipe(res);
 	} catch (error) {
 		console.error("Error fetching image:", error);
 		res.status(500).json({ error: "Internal Server Error" });
