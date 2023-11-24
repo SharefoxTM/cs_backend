@@ -7,7 +7,7 @@ export const getLocation: Handler = (req, res, next) => {
 	if (!req.params.id) {
 		throw new Error("Invalid id");
 	}
-	const url = process.env.DB_HOST + `api/stock/location/${req.params.id}/`;
+	const url = process.env.DB_HOST + `/api/stock/location/${req.params.id}/`;
 	axios
 		.get(url, {
 			headers: {
