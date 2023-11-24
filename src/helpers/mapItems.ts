@@ -6,6 +6,8 @@ import { Part } from "../models/Part.model";
 import { APIPart } from "../models/APIPart.model";
 import { APIPartStock } from "../models/APIPartStock.model";
 import { PartStock } from "../models/PartStock.model";
+import { APIStockLocation } from "../models/APIStockLocation";
+import { StockLocation } from "../models/StockLocation";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -246,10 +248,25 @@ const mapPartStock = (apiPartStock: APIPartStock[]): PartStock[] => {
 	return mappedStock;
 };
 
+const mapStockLocation = (apiLocation: APIStockLocation): StockLocation => {
+	const mappedLocation: StockLocation = {
+		pk: apiLocation.pk,
+		name: apiLocation.name,
+		description: apiLocation.description,
+		external: apiLocation.external,
+		icon: apiLocation.icon,
+		pathstring: apiLocation.pathstring,
+		structural: apiLocation.structural,
+		tags: apiLocation.tags,
+	};
+	return mappedLocation;
+};
+
 export default {
 	mapTree,
 	mapQuery,
 	mapPart,
 	mapParts,
 	mapPartStock,
+	mapStockLocation,
 };

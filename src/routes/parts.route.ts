@@ -10,6 +10,8 @@ PartRouter.route("/").get(PartController.getAllParts);
 
 PartRouter.route("/media/part_images/:id").get(PartController.getImage);
 
+PartRouter.route("/location/:id").get(PartController.getLocation);
+
 PartRouter.route("/:id")
 	.get(PartController.getPart)
 	.put(PartController.updatePart);
