@@ -7,7 +7,7 @@ require("dotenv").config();
 
 const getPartImgURL = async (id: string): Promise<string> => {
 	const part = await axios
-		.get(process.env.DB_HOST + `/api/part/${id}/`, {
+		.get(process.env.DB_HOST + `/media/part_images/${id}`, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
 			},
@@ -29,13 +29,8 @@ export const getImage: Handler = async (req, res, next) => {
 	res.header("Access-Control-Allow-Origin", "*");
 	res.type("img/jpeg");
 	try {
-		const img = await getPartImgURL(req.params.id);
-		if (!img) {
-			return res.status(404).send("");
-		}
-
-		const url = process.env.DB_HOST + img;
-
+		const url = process.env.DB_HOST + `/media/part_images/${req.params.id}`;
+		console.log(url);
 		const response = await axios.get(url, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,

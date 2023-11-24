@@ -44,7 +44,6 @@ export const getDetails: Handler = (req, res, next) => {
 				})
 				.then((response: APIPartStock[]) => {
 					res.header("Access-Control-Allow-Origin", "*");
-					//TODO: Map this to correct format!
 					res.json(Map.mapPartStock(response));
 				});
 			break;

@@ -8,7 +8,7 @@ export const PartRouter = Router();
 PartRouter.route("/").get(PartController.getAllParts);
 //.post(PartController.createCategory);
 
-PartRouter.route("/img/:id").get(PartController.getImage);
+PartRouter.route("/media/part_images/:id").get(PartController.getImage);
 
 PartRouter.route("/:id")
 	.get(PartController.getPart)
