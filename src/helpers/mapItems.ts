@@ -6,8 +6,10 @@ import { Part } from "../models/Part.model";
 import { APIPart } from "../models/APIPart.model";
 import { APIPartStock } from "../models/APIPartStock.model";
 import { PartStock } from "../models/PartStock.model";
-import { APIStockLocation } from "../models/APIStockLocation";
-import { StockLocation } from "../models/StockLocation";
+import { APIStockLocation } from "../models/APIStockLocation.model";
+import { StockLocation } from "../models/StockLocation.model";
+import { APISupplierPart } from "../models/SupplierPart/API/APISupplierPart.model";
+import { SupplierPart } from "../models/SupplierPart/mapping/SupplierPart.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -262,6 +264,30 @@ const mapStockLocation = (apiLocation: APIStockLocation): StockLocation => {
 	return mappedLocation;
 };
 
+const mapSupplierPart = (apiSupplierPart: APISupplierPart): SupplierPart => {
+	const mappedSP: SupplierPart = {
+		available: apiSupplierPart.available,
+		barcode_hash: apiSupplierPart.barcode_hash,
+		description: apiSupplierPart.description,
+		in_stock: apiSupplierPart.in_stock,
+		link: apiSupplierPart.link,
+		manufacturer: apiSupplierPart.manufacturer,
+		MPN: apiSupplierPart.MPN,
+		note: apiSupplierPart.note,
+		pack_quantity: apiSupplierPart.pack_quantity,
+		pack_quantity_native: apiSupplierPart.pack_quantity_native,
+		packaging: apiSupplierPart.packaging,
+		part: apiSupplierPart.part,
+		pk: apiSupplierPart.pk,
+		SKU: apiSupplierPart.SKU,
+		supplier: apiSupplierPart.supplier,
+		tags: apiSupplierPart.tags,
+		updated: apiSupplierPart.updated,
+		url: apiSupplierPart.url,
+	};
+	return mappedSP;
+};
+
 export default {
 	mapTree,
 	mapQuery,
@@ -269,4 +295,5 @@ export default {
 	mapParts,
 	mapPartStock,
 	mapStockLocation,
+	mapSupplierPart,
 };
