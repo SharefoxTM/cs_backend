@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Handler, response } from "express";
-import { APICategory } from "../../../../models/Category.model";
+import { APICategory } from "../../../../models/Category/Category.model";
 import { urlCategory } from "../../resources";
 
 const axios = require("axios");

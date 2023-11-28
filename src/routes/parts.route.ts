@@ -12,6 +12,7 @@ PartRouter.route("/media/part_images/:id").get(PartController.getImage);
 
 PartRouter.route("/location/:id").get(PartController.getLocation);
 PartRouter.route("/supplier/:id").get(PartController.getSupplierPart);
+PartRouter.route("/bo/:id").get(PartController.getBuildOrders);
 
 PartRouter.route("/:id")
 	.get(PartController.getPart)

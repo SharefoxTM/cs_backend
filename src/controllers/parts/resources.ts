@@ -1,4 +1,4 @@
-import { PartQuery } from "../../models/PartQuery.model";
+import { PartQuery } from "../../models/Part/PartQuery.model";
 
 export const urlPart = process.env.DB_HOST + "/api/part/";
 

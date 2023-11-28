@@ -1,15 +1,17 @@
 import { Request } from "express";
-import { APICategory } from "../models/Category.model";
-import { CategoryTree } from "../models/CategoryTree.model";
-import { PartQuery } from "../models/PartQuery.model";
-import { Part } from "../models/Part.model";
-import { APIPart } from "../models/APIPart.model";
-import { APIPartStock } from "../models/APIPartStock.model";
-import { PartStock } from "../models/PartStock.model";
-import { APIStockLocation } from "../models/APIStockLocation.model";
-import { StockLocation } from "../models/StockLocation.model";
-import { APISupplierPart } from "../models/SupplierPart/API/APISupplierPart.model";
-import { SupplierPart } from "../models/SupplierPart/mapping/SupplierPart.model";
+import { APICategory } from "../models/Category/Category.model";
+import { CategoryTree } from "../models/Category/CategoryTree.model";
+import { PartQuery } from "../models/Part/PartQuery.model";
+import { Part } from "../models/Part/Part.model";
+import { APIPart } from "../models/Part/APIPart.model";
+import { APIPartStock } from "../models/Stock/APIPartStock.model";
+import { PartStock } from "../models/Stock/PartStock.model";
+import { APIStockLocation } from "../models/Stock/APIStockLocation.model";
+import { StockLocation } from "../models/Stock/StockLocation.model";
+import { APISupplierPart } from "../models/SupplierPart/APISupplierPart.model";
+import { SupplierPart } from "../models/SupplierPart/SupplierPart.model";
+import { APIBuildOrders } from "../models/BuildOrders/APIBuildOrders.model";
+import { BuildOrders } from "../models/BuildOrders/BuildOrders.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -288,6 +290,38 @@ const mapSupplierPart = (apiSupplierPart: APISupplierPart): SupplierPart => {
 	return mappedSP;
 };
 
+const mapBuildOrders = (apiBO: APIBuildOrders): BuildOrders => {
+	const mappedBO: BuildOrders = apiBO.map((bo) => ({
+		build: bo.build,
+		install_into: bo.install_into,
+		stock_item: bo.stock_item,
+		quantity: bo.quantity,
+		build_detail: {
+			pk: bo.build_detail.pk,
+			url: bo.build_detail.url,
+			title: bo.build_detail.title,
+			barcode_hash: bo.build_detail.barcode_hash,
+			batch: bo.build_detail.batch,
+			creation_date: bo.build_detail.creation_date,
+			completed: bo.build_detail.completed,
+			completion_date: bo.build_detail.completion_date,
+			destination: bo.build_detail.destination,
+			parent: bo.build_detail.parent,
+			part: bo.build_detail.part,
+			project_code: bo.build_detail.project_code,
+			project_code_detail: bo.build_detail.project_code_detail,
+			reference: bo.build_detail.reference,
+			quantity: bo.build_detail.quantity,
+			status: bo.build_detail.status,
+			status_text: bo.build_detail.status_text,
+			target_date: bo.build_detail.target_date,
+			take_from: bo.build_detail.take_from,
+			priority: bo.build_detail.priority,
+		},
+	}));
+	return mappedBO;
+};
+
 export default {
 	mapTree,
 	mapQuery,
@@ -296,4 +330,5 @@ export default {
 	mapPartStock,
 	mapStockLocation,
 	mapSupplierPart,
+	mapBuildOrders,
 };

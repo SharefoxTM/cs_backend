@@ -1,6 +1,6 @@
 import { Handler, Response, response } from "express";
-import { CategoryTree } from "../../../../models/CategoryTree.model";
-import { APICategory } from "../../../../models/Category.model";
+import { CategoryTree } from "../../../../models/Category/CategoryTree.model";
+import { APICategory } from "../../../../models/Category/Category.model";
 import Map from "../../../../helpers/mapItems";
 import axios, { AxiosResponse } from "axios";
 import { urlCategory } from "../../resources";

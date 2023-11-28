@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import { urlCategory } from "../../resources";
 import { AxiosResponse } from "axios";
-import { APICategory } from "../../../../models/Category.model";
+import { APICategory } from "../../../../models/Category/Category.model";
 
 const axios = require("axios");
 

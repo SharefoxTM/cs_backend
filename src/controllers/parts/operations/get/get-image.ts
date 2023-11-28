@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Handler } from "express";
-import { APIPart } from "../../../../models/APIPart.model";
+import { APIPart } from "../../../../models/Part/APIPart.model";
 
 const axios = require("axios");
 require("dotenv").config();

@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Handler } from "express";
 import Map from "../../../../helpers/mapItems";
-import { APIStockLocation } from "../../../../models/APIStockLocation.model";
+import { APIStockLocation } from "../../../../models/Stock/APIStockLocation.model";
 
 export const getLocation: Handler = (req, res, next) => {
 	if (!req.params.id) {

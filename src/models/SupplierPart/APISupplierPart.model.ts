@@ -1,6 +1,6 @@
 import { APIManufacturerDetail } from "./APIManufacturerDetail.model";
 import { APIManufacturerPartDetail } from "./APIManufacturerPartDetail.model";
-import { APIPartDetail } from "./APIPartDetail.model";
+import { APIPartDetail } from "../Part/APIPartDetail.model";
 import { APISupplierDetail } from "./APISupplierDetail.model";
 
 export type APISupplierPart = {

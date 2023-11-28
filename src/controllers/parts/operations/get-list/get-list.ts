@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { Handler } from "express";
-import { APIPart } from "../../../../models/APIPart.model";
+import { APIPart } from "../../../../models/Part/APIPart.model";
 import { createURL } from "../../resources";
 import Map from "../../../../helpers/mapItems";
 

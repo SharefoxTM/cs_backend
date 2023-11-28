@@ -1,9 +1,8 @@
-import { Handler, response } from "express";
-import { urlPart } from "../../resources";
+import { Handler } from "express";
 import { AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems";
-import { APIPartParameter } from "../../../../models/APIPartParameter.model";
-import { APIPartStock } from "../../../../models/APIPartStock.model";
+import { APIPartParameter } from "../../../../models/Parameters/APIPartParameter.model";
+import { APIPartStock } from "../../../../models/Stock/APIPartStock.model";
 
 const axios = require("axios");
 require("dotenv").config();

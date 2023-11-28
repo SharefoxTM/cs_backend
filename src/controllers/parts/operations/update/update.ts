@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import Map from "../../../../helpers/mapItems";
 import { urlPart } from "../../resources";
-import { APIPart } from "../../../../models/APIPart.model";
+import { APIPart } from "../../../../models/Part/APIPart.model";
 import { AxiosResponse } from "axios";
 
 const axios = require("axios");
