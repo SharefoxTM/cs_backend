@@ -3,7 +3,7 @@ export type PartStock = {
 	build: number;
 	expiry_date: string;
 	is_building: boolean;
-	LocationName: string;
+	LocationName: string | null;
 	packaging: string;
 	part: number;
 	pk: number;
@@ -14,7 +14,7 @@ export type PartStock = {
 	supplier_part_detail: {
 		name: string;
 		url: string | null;
-	};
+	} | null;
 	barcode_hash: string;
 	updated: string;
 	purchase_price: string;

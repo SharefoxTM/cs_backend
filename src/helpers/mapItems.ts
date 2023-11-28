@@ -228,7 +228,8 @@ const mapStock = (apiPartStock: APIPartStock[]): PartStock[] => {
 		expiry_date: stock.expiry_date,
 		installed_items: stock.installed_items,
 		is_building: stock.is_building,
-		LocationName: stock.location_detail.pathstring,
+		LocationName:
+			stock.location_detail === null ? null : stock.location_detail.pathstring,
 		packaging: stock.packaging,
 		part: stock.part,
 		pk: stock.pk,
@@ -239,10 +240,13 @@ const mapStock = (apiPartStock: APIPartStock[]): PartStock[] => {
 		stale: stock.stale,
 		status: stock.status,
 		status_text: stock.status_text,
-		supplier_part_detail: {
-			name: stock.supplier_part_detail.SKU,
-			url: stock.supplier_part_detail.link,
-		},
+		supplier_part_detail:
+			stock.supplier_part_detail === null
+				? null
+				: {
+						name: stock.supplier_part_detail.SKU,
+						url: stock.supplier_part_detail.link,
+				  },
 		tags: stock.tags,
 		tracking_items: stock.tracking_items,
 		updated: stock.updated,

@@ -28,7 +28,7 @@ export type APIPartStock = {
 	status_text: string;
 	stocktake_date: string;
 	supplier_part: number;
-	supplier_part_detail: APISupplierPartDetail;
+	supplier_part_detail: APISupplierPartDetail | null;
 	barcode_hash: string;
 	updated: string;
 	purchase_price: string;
