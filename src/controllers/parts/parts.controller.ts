@@ -6,7 +6,6 @@ import { getImage } from "./operations/get/get-image";
 import { getDetails } from "./operations/get/get-details";
 import { getLocation } from "./operations/get/get-location";
 import { getSupplierPart } from "./operations/get/get-supplierPart";
-import { getBuildOrders } from "./operations/get/get-buildOrders";
 
 export default {
 	getAllParts,
@@ -15,7 +14,6 @@ export default {
 	getImage,
 	getLocation,
 	getSupplierPart,
-	getBuildOrders,
 	// createCategory,
 	updatePart,
 	// deleteCategory,

@@ -3,6 +3,7 @@ import { AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems";
 import { APIPartParameter } from "../../../../models/Parameters/APIPartParameter.model";
 import { APIPartStock } from "../../../../models/Stock/APIPartStock.model";
+import { APIBuildOrders } from "../../../../models/BuildOrders/APIBuildOrders.model";
 
 const axios = require("axios");
 require("dotenv").config();
@@ -44,6 +45,22 @@ export const getDetails: Handler = (req, res, next) => {
 				.then((response: APIPartStock[]) => {
 					res.header("Access-Control-Allow-Origin", "*");
 					res.json(Map.mapPartStock(response));
+				});
+			break;
+		case "Build Orders":
+			url += `/api/build/item/?part=${req.params.id}&build_detail=true&stock_detail=false&location_detail=false&part_detail=false`;
+			axios
+				.get(url, {
+					headers: {
+						Authorization: process.env.DB_TOKEN,
+					},
+				})
+				.then((response: AxiosResponse<APIBuildOrders>) => {
+					return response.data;
+				})
+				.then((response: APIBuildOrders) => {
+					res.header("Access-Control-Allow-Origin", "*");
+					res.json(Map.mapBuildOrders(response));
 				});
 			break;
 
