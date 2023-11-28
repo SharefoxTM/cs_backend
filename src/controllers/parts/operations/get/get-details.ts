@@ -3,7 +3,8 @@ import { AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems";
 import { APIPartParameter } from "../../../../models/Parameters/APIPartParameter.model";
 import { APIPartStock } from "../../../../models/Stock/APIPartStock.model";
-import { APIBuildOrder } from "../../../../models/BuildOrders/APIBuildOrder.model";
+import { APIBuildOrder } from "../../../../models/BuildOrder/APIBuildOrder.model";
+import { APIUsedIn } from "../../../../models/UsedIn/APIUsedIn.model";
 
 const axios = require("axios");
 require("dotenv").config();
@@ -60,8 +61,23 @@ export const getDetails: Handler = (req, res, next) => {
 				})
 				.then((response: APIBuildOrder[]) => {
 					res.header("Access-Control-Allow-Origin", "*");
-					console.log(response);
 					res.json(Map.mapBuildOrders(response));
+				});
+			break;
+		case "Used In":
+			url += `/api/bom/?search=&uses=${req.params.id}&part_detail=true&sub_part_detail=true`;
+			axios
+				.get(url, {
+					headers: {
+						Authorization: process.env.DB_TOKEN,
+					},
+				})
+				.then((response: AxiosResponse<APIUsedIn[]>) => {
+					return response.data;
+				})
+				.then((response: APIUsedIn[]) => {
+					res.header("Access-Control-Allow-Origin", "*");
+					res.json(Map.mapUsedIn(response));
 				});
 			break;
 

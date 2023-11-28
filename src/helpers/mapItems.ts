@@ -6,8 +6,10 @@ import { Part } from "../models/Part/Part.model";
 import { APIPart } from "../models/Part/APIPart.model";
 import { APIPartStock } from "../models/Stock/APIPartStock.model";
 import { PartStock } from "../models/Stock/PartStock.model";
-import { APIBuildOrder } from "../models/BuildOrders/APIBuildOrder.model";
-import { BuildOrder } from "../models/BuildOrders/BuildOrder.model";
+import { APIBuildOrder } from "../models/BuildOrder/APIBuildOrder.model";
+import { BuildOrder } from "../models/BuildOrder/BuildOrder.model";
+import { APIUsedIn } from "../models/UsedIn/APIUsedIn.model";
+import { UsedIn } from "../models/UsedIn/UsedIn.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -286,6 +288,31 @@ const mapBuildOrders = (apiBO: APIBuildOrder[]): BuildOrder[] => {
 	return mappedBO;
 };
 
+const mapUsedIn = (apiUsedIn: APIUsedIn[]): UsedIn[] => {
+	const mappedUI: UsedIn[] = apiUsedIn.map((ui) => ({
+		allow_variants: ui.allow_variants,
+		consumable: ui.consumable,
+		inherited: ui.inherited,
+		optional: ui.optional,
+		part_detail: {
+			pk: ui.part_detail.pk,
+			barcode_hash: ui.part_detail.barcode_hash,
+			full_name: ui.part_detail.full_name,
+			thumbnail: ui.part_detail.thumbnail,
+			active: ui.part_detail.active,
+			assembly: ui.part_detail.assembly,
+			is_template: ui.part_detail.is_template,
+			purchaseable: ui.part_detail.purchaseable,
+			salable: ui.part_detail.salable,
+			trackable: ui.part_detail.trackable,
+			virtual: ui.part_detail.virtual,
+			units: ui.part_detail.units,
+		},
+		quantity: ui.quantity,
+	}));
+	return mappedUI;
+};
+
 export default {
 	mapTree,
 	mapQuery,
@@ -293,4 +320,5 @@ export default {
 	mapParts,
 	mapStock,
 	mapBuildOrders,
+	mapUsedIn,
 };
