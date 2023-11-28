@@ -32,7 +32,7 @@ export const getDetails: Handler = (req, res, next) => {
 				});
 			break;
 		case "Stock":
-			url += `/api/stock/?part=${id}`;
+			url += `/api/stock/?part=${id}&supplier_part_detail=true&location_detail=true`;
 			axios
 				.get(url, {
 					headers: {
@@ -44,7 +44,7 @@ export const getDetails: Handler = (req, res, next) => {
 				})
 				.then((response: APIPartStock[]) => {
 					res.header("Access-Control-Allow-Origin", "*");
-					res.json(Map.mapPartStock(response));
+					res.json(Map.mapStock(response));
 				});
 			break;
 		case "Build Orders":

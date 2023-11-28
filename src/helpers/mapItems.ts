@@ -6,10 +6,6 @@ import { Part } from "../models/Part/Part.model";
 import { APIPart } from "../models/Part/APIPart.model";
 import { APIPartStock } from "../models/Stock/APIPartStock.model";
 import { PartStock } from "../models/Stock/PartStock.model";
-import { APIStockLocation } from "../models/Stock/APIStockLocation.model";
-import { StockLocation } from "../models/Stock/StockLocation.model";
-import { APISupplierPart } from "../models/SupplierPart/APISupplierPart.model";
-import { SupplierPart } from "../models/SupplierPart/SupplierPart.model";
 import { APIBuildOrders } from "../models/BuildOrders/APIBuildOrders.model";
 import { BuildOrders } from "../models/BuildOrders/BuildOrders.model";
 
@@ -222,7 +218,7 @@ const mapParts = (apiParts: APIPart[]): Part[] => {
 	return parts;
 };
 
-const mapPartStock = (apiPartStock: APIPartStock[]): PartStock[] => {
+const mapStock = (apiPartStock: APIPartStock[]): PartStock[] => {
 	const mappedStock: PartStock[] = apiPartStock.map((stock) => ({
 		allocated: stock.allocated,
 		barcode_hash: stock.barcode_hash,
@@ -232,8 +228,7 @@ const mapPartStock = (apiPartStock: APIPartStock[]): PartStock[] => {
 		expiry_date: stock.expiry_date,
 		installed_items: stock.installed_items,
 		is_building: stock.is_building,
-		link: stock.link,
-		location: stock.location,
+		LocationName: stock.location_detail.pathstring,
 		packaging: stock.packaging,
 		part: stock.part,
 		pk: stock.pk,
@@ -244,50 +239,15 @@ const mapPartStock = (apiPartStock: APIPartStock[]): PartStock[] => {
 		stale: stock.stale,
 		status: stock.status,
 		status_text: stock.status_text,
-		supplier_part: stock.supplier_part,
+		supplier_part_detail: {
+			name: stock.supplier_part_detail.SKU,
+			url: stock.supplier_part_detail.link,
+		},
 		tags: stock.tags,
 		tracking_items: stock.tracking_items,
 		updated: stock.updated,
 	}));
 	return mappedStock;
-};
-
-const mapStockLocation = (apiLocation: APIStockLocation): StockLocation => {
-	const mappedLocation: StockLocation = {
-		pk: apiLocation.pk,
-		name: apiLocation.name,
-		description: apiLocation.description,
-		external: apiLocation.external,
-		icon: apiLocation.icon,
-		pathstring: apiLocation.pathstring,
-		structural: apiLocation.structural,
-		tags: apiLocation.tags,
-	};
-	return mappedLocation;
-};
-
-const mapSupplierPart = (apiSupplierPart: APISupplierPart): SupplierPart => {
-	const mappedSP: SupplierPart = {
-		available: apiSupplierPart.available,
-		barcode_hash: apiSupplierPart.barcode_hash,
-		description: apiSupplierPart.description,
-		in_stock: apiSupplierPart.in_stock,
-		link: apiSupplierPart.link,
-		manufacturer: apiSupplierPart.manufacturer,
-		MPN: apiSupplierPart.MPN,
-		note: apiSupplierPart.note,
-		pack_quantity: apiSupplierPart.pack_quantity,
-		pack_quantity_native: apiSupplierPart.pack_quantity_native,
-		packaging: apiSupplierPart.packaging,
-		part: apiSupplierPart.part,
-		pk: apiSupplierPart.pk,
-		SKU: apiSupplierPart.SKU,
-		supplier: apiSupplierPart.supplier,
-		tags: apiSupplierPart.tags,
-		updated: apiSupplierPart.updated,
-		url: apiSupplierPart.url,
-	};
-	return mappedSP;
 };
 
 const mapBuildOrders = (apiBO: APIBuildOrders): BuildOrders => {
@@ -327,8 +287,6 @@ export default {
 	mapQuery,
 	mapPart,
 	mapParts,
-	mapPartStock,
-	mapStockLocation,
-	mapSupplierPart,
+	mapStock,
 	mapBuildOrders,
 };
