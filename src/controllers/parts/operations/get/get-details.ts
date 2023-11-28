@@ -3,7 +3,7 @@ import { AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems";
 import { APIPartParameter } from "../../../../models/Parameters/APIPartParameter.model";
 import { APIPartStock } from "../../../../models/Stock/APIPartStock.model";
-import { APIBuildOrders } from "../../../../models/BuildOrders/APIBuildOrders.model";
+import { APIBuildOrder } from "../../../../models/BuildOrders/APIBuildOrder.model";
 
 const axios = require("axios");
 require("dotenv").config();
@@ -55,11 +55,12 @@ export const getDetails: Handler = (req, res, next) => {
 						Authorization: process.env.DB_TOKEN,
 					},
 				})
-				.then((response: AxiosResponse<APIBuildOrders>) => {
+				.then((response: AxiosResponse<APIBuildOrder[]>) => {
 					return response.data;
 				})
-				.then((response: APIBuildOrders) => {
+				.then((response: APIBuildOrder[]) => {
 					res.header("Access-Control-Allow-Origin", "*");
+					console.log(response);
 					res.json(Map.mapBuildOrders(response));
 				});
 			break;

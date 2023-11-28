@@ -6,8 +6,8 @@ import { Part } from "../models/Part/Part.model";
 import { APIPart } from "../models/Part/APIPart.model";
 import { APIPartStock } from "../models/Stock/APIPartStock.model";
 import { PartStock } from "../models/Stock/PartStock.model";
-import { APIBuildOrders } from "../models/BuildOrders/APIBuildOrders.model";
-import { BuildOrders } from "../models/BuildOrders/BuildOrders.model";
+import { APIBuildOrder } from "../models/BuildOrders/APIBuildOrder.model";
+import { BuildOrder } from "../models/BuildOrders/BuildOrder.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -254,8 +254,8 @@ const mapStock = (apiPartStock: APIPartStock[]): PartStock[] => {
 	return mappedStock;
 };
 
-const mapBuildOrders = (apiBO: APIBuildOrders): BuildOrders => {
-	const mappedBO: BuildOrders = apiBO.map((bo) => ({
+const mapBuildOrders = (apiBO: APIBuildOrder[]): BuildOrder[] => {
+	const mappedBO: BuildOrder[] = apiBO.map((bo) => ({
 		build: bo.build,
 		install_into: bo.install_into,
 		stock_item: bo.stock_item,
