@@ -16,4 +16,6 @@ export type APIPartDetail = {
 	trackable: boolean;
 	virtual: boolean;
 	units: string;
+	pricing_min?: string;
+	pricing_max?: string;
 };
