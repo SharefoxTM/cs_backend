@@ -8,11 +8,11 @@ export const PartRouter = Router();
 PartRouter.route("/").get(PartController.getAllParts);
 //.post(PartController.createCategory);
 
-PartRouter.route("/media/part_images/:id").get(PartController.getImage);
+PartRouter.route("/:folder/:type/:id").get(PartController.getImage);
 
-PartRouter.route("/:id")
-	.get(PartController.getPart)
-	.put(PartController.updatePart);
+PartRouter.route("/:id").get(PartController.getPart);
+//	.put(PartController.updatePart);
 // 	.delete(PartController.deleteCategory);
 
 PartRouter.route("/:id/:detailTopic").get(PartController.getDetails);
+PartRouter.route("/stock/:id/:action").get().put().delete();
