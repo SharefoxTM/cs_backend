@@ -11,6 +11,7 @@ import express from "express";
 // 2) Import the routers
 import { CategoryRouter } from "../routes/categories.route";
 import { PartRouter } from "../routes/parts.route";
+import { StorageRouter } from "../routes/storage.route";
 // import { ManufacturerRouter } from "../routes/manufacturers.route";
 
 export const app = express();
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use("/api/categories", CategoryRouter);
 app.use("/api/parts", PartRouter);
+app.use("/api/storage", StorageRouter);
 // app.use("/api/users", ManufacturerRouter);
 
 // TODO: Catch all unknown routes
