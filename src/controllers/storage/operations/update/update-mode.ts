@@ -1,8 +1,5 @@
 import { Handler } from "express";
-
 import net from "net";
-const axios = require("axios");
-require("dotenv").config();
 
 export const updateMode: Handler = (req, res) => {
 	const client = new net.Socket();
