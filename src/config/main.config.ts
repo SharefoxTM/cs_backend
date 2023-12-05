@@ -12,6 +12,7 @@ import express from "express";
 import { CategoryRouter } from "../routes/categories.route";
 import { PartRouter } from "../routes/parts.route";
 import { StorageRouter } from "../routes/storage.route";
+import { LocationRouter } from "../routes/location.route";
 // import { ManufacturerRouter } from "../routes/manufacturers.route";
 
 export const app = express();
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/api/categories", CategoryRouter);
 app.use("/api/parts", PartRouter);
 app.use("/api/storage", StorageRouter);
+app.use("/api/location", LocationRouter);
 // app.use("/api/users", ManufacturerRouter);
 
 // TODO: Catch all unknown routes
