@@ -10,6 +10,8 @@ import { APIBuildOrder } from "../models/BuildOrder/APIBuildOrder.model";
 import { BuildOrder } from "../models/BuildOrder/BuildOrder.model";
 import { APIUsedIn } from "../models/UsedIn/APIUsedIn.model";
 import { UsedIn } from "../models/UsedIn/UsedIn.model";
+import { APIStockLocation } from "../models/Stock/APIStockLocation.model";
+import { MovingStock } from "../models/Stock/MovingStock.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -313,6 +315,22 @@ const mapUsedIn = (apiUsedIn: APIUsedIn[]): UsedIn[] => {
 	return mappedUI;
 };
 
+const mapMovingStock = (apistock: APIStockLocation[]): MovingStock[] => {
+	const ms: MovingStock[] = apistock.map((as) => ({
+		batch: as.batch,
+		delete_on_deplete: as.delete_on_deplete,
+		location_detail_pathstring: as.location_detail.pathstring,
+		pk: as.pk,
+		quantity: as.quantity,
+		serial: as.serial,
+		status: as.status,
+		status_text: as.status_text,
+		supplier_part_SKU: as.supplier_part_detail.SKU,
+		barcode_hash: as.barcode_hash,
+	}));
+	return ms;
+};
+
 export default {
 	mapTree,
 	mapQuery,
@@ -321,4 +339,5 @@ export default {
 	mapStock,
 	mapBuildOrders,
 	mapUsedIn,
+	mapMovingStock,
 };

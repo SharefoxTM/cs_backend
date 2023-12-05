@@ -15,4 +15,3 @@ PartRouter.route("/:id").get(PartController.getPart);
 // 	.delete(PartController.deleteCategory);
 
 PartRouter.route("/:id/:detailTopic").get(PartController.getDetails);
-PartRouter.route("/stock/:id/:action").get().put().delete();
