@@ -4,3 +4,4 @@ import LocationController from "../controllers/location/location.controller";
 export const LocationRouter = Router();
 
 LocationRouter.route("/").post(LocationController.createLocation);
+LocationRouter.route("/IPs/").get(LocationController.getStorageIPs);
