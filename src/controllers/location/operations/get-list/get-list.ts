@@ -1,6 +1,7 @@
 import { Handler } from "express";
 import { APILocation } from "../../../../models/Location/APILocation.model";
 import axios, { AxiosResponse } from "axios";
+import Map from "../../../../helpers/mapItems";
 
 export const getStorageIPs: Handler = (req, res, next) => {
 	axios
@@ -13,6 +14,6 @@ export const getStorageIPs: Handler = (req, res, next) => {
 			return response.data;
 		})
 		.then(async (response: APILocation[]) => {
-			res.json(response);
+			res.json(Map.mapIPs(response));
 		});
 };

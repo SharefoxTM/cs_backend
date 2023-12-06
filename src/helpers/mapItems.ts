@@ -12,6 +12,8 @@ import { APIUsedIn } from "../models/UsedIn/APIUsedIn.model";
 import { UsedIn } from "../models/UsedIn/UsedIn.model";
 import { APIStockLocation } from "../models/Stock/APIStockLocation.model";
 import { MovingStock } from "../models/Stock/MovingStock.model";
+import { APILocation } from "../models/Location/APILocation.model";
+import { APILocationDetail } from "../models/Location/APILocationDetail.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -331,6 +333,28 @@ const mapMovingStock = (apistock: APIStockLocation[]): MovingStock[] => {
 	return ms;
 };
 
+const validateIP = (ip: string): boolean => {
+	if (
+		/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+			ip,
+		)
+	) {
+		return true;
+	}
+	return false;
+};
+
+const mapIPs = (apilocation: APILocation[]): APILocationDetail[] => {
+	const ip: APILocationDetail[] = apilocation
+		.filter((al) => validateIP(al.name))
+		.map((al) => ({
+			pk: al.pk,
+			name: al.name,
+			pathstring: al.pathstring,
+		}));
+	return ip;
+};
+
 export default {
 	mapTree,
 	mapQuery,
@@ -340,4 +364,5 @@ export default {
 	mapBuildOrders,
 	mapUsedIn,
 	mapMovingStock,
+	mapIPs,
 };
