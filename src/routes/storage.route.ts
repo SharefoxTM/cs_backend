@@ -12,6 +12,8 @@ StorageRouter.use(function (req, res, next) {
 	next();
 });
 
+StorageRouter.route("/").post(StorageController.createReel);
+
 StorageRouter.route("/mode/").post(StorageController.updateMode);
 StorageRouter.route("/moving/:ID").get(StorageController.getReelList);
 StorageRouter.route("/:ID").get(StorageController.getReel);

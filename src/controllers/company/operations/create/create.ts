@@ -2,7 +2,6 @@ import axios, { AxiosResponse } from "axios";
 import { Handler } from "express";
 
 export const createSupplierPart: Handler = async (req, res, next) => {
-	console.log(req.body);
 	axios
 		.post(`${process.env.DB_HOST}/api/company/part/`, req.body, {
 			headers: {
