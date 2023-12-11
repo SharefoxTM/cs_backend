@@ -14,6 +14,8 @@ import { APIStockLocation } from "../models/Stock/APIStockLocation.model";
 import { MovingStock } from "../models/Stock/MovingStock.model";
 import { APILocation } from "../models/Location/APILocation.model";
 import { APILocationDetail } from "../models/Location/APILocationDetail.model";
+import { APISupplier } from "../models/Company/APISupplier.model";
+import { APISupplierDetail } from "../models/Company/APISupplierDetail.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -355,6 +357,17 @@ const mapIPs = (apilocation: APILocation[]): APILocationDetail[] => {
 	return ip;
 };
 
+const mapSuppliers = (apiSuppliers: APISupplier[]): APISupplierDetail[] => {
+	const sd: APISupplierDetail[] = apiSuppliers.map((as) => ({
+		pk: as.pk,
+		name: as.name,
+		description: as.description,
+		image: as.image,
+		url: as.url,
+	}));
+	return sd;
+};
+
 export default {
 	mapTree,
 	mapQuery,
@@ -365,4 +378,5 @@ export default {
 	mapUsedIn,
 	mapMovingStock,
 	mapIPs,
+	mapSuppliers,
 };

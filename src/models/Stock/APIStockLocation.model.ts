@@ -1,5 +1,5 @@
 import { APILocationDetail } from "../Location/APILocationDetail.model";
-import { APISupplierPartDetail } from "../SupplierPart/APISupplierPartDetail.model";
+import { APISupplierPartDetail } from "../Company/APISupplierPartDetail.model";
 
 export type APIStockLocation = {
 	batch: String;

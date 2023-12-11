@@ -14,4 +14,5 @@ CompanyRouter.use(function (req, res, next) {
 
 // TODO: Check op id doen om te kijken of het een number is
 
-CompanyRouter.route("/").get(Controller.getSupplierPartList);
+CompanyRouter.route("/parts/").get(Controller.getSupplierPartList);
+CompanyRouter.route("/suppliers/").get(Controller.getSupplierList);
