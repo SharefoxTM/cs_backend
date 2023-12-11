@@ -1,4 +1,5 @@
 //import functions and export default an object
+import { createSupplierPart } from "./operations/create/create";
 import {
 	getSupplierList,
 	getSupplierPartList,
@@ -7,4 +8,5 @@ import {
 export default {
 	getSupplierPartList,
 	getSupplierList,
+	createSupplierPart,
 };
