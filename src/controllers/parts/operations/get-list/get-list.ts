@@ -1,24 +1,21 @@
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APIPart } from "../../../../models/Part/APIPart.model";
-import { createURL } from "../../resources";
 import Map from "../../../../helpers/mapItems";
-
-const axios = require("axios");
-require("dotenv").config();
+import { Part } from "../../../../models/Part/Part.model";
 
 export const getAllParts: Handler = async (req, res, next) => {
 	const query = Map.mapQuery(req);
-	const url = createURL(query);
 	const page = parseInt(req.query.page?.toString() || "0") + 1;
 	const pageSize = parseInt(req.query.pageSize?.toString() || "25");
 	const startIndex = (page - 1) * pageSize;
 	const endIndex = page * pageSize;
-	const parts: APIPart[] = await axios
-		.get(url, {
+	const parts: Part[] = await axios
+		.get(`${process.env.DB_HOST}/api/part/`, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
 			},
+			params: req.query,
 		})
 		.then((response: AxiosResponse<APIPart[]>) => {
 			return response.data;
@@ -29,6 +26,5 @@ export const getAllParts: Handler = async (req, res, next) => {
 	const paginatedParts = parts.slice(startIndex, endIndex);
 	const totalPages = Math.ceil(parts.length / pageSize);
 
-	res.header("Access-Control-Allow-Origin", "*");
 	res.json({ data: paginatedParts, totalPages });
 };

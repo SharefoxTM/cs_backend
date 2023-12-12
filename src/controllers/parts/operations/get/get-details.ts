@@ -1,5 +1,5 @@
 import { Handler } from "express";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems";
 import { APIPartParameter } from "../../../../models/Parameters/APIPartParameter.model";
 import { APIPartStock } from "../../../../models/Stock/APIPartStock.model";
@@ -8,15 +8,12 @@ import { APIUsedIn } from "../../../../models/UsedIn/APIUsedIn.model";
 // import { APIPartInternalPrice } from "../../../../models/Part/APIPartInternalPrice.model";
 // import { APIOrderPOLine } from "../../../../models/Order/APIOrderPOLine.model";
 
-const axios = require("axios");
-require("dotenv").config();
-
 export const getDetails: Handler = (req, res, next) => {
 	if (!req.params.id) {
 		throw new Error("Invalid id");
 	}
 	const id = req.params.id;
-	let url = process.env.DB_HOST;
+	let url = process.env.DB_HOST!;
 	switch (req.params.detailTopic) {
 		case "Parameters":
 			url += `/api/part/parameter/?part=${id}`;

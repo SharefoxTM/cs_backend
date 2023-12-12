@@ -1,14 +1,12 @@
-import { AxiosResponse } from "axios";
-import { Handler, response } from "express";
+import axios, { AxiosResponse } from "axios";
+import { Handler } from "express";
 import { APICategory } from "../../../../models/Category/Category.model";
-import { urlCategory } from "../../resources";
 
-const axios = require("axios");
-require("dotenv").config();
+require("dotenv");
 
 export const getAllCategories: Handler = (req, res, next) => {
 	axios
-		.get(urlCategory, {
+		.get(`${process.env.DB_HOST}/api/part/category/`, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
 			},
@@ -17,7 +15,6 @@ export const getAllCategories: Handler = (req, res, next) => {
 			return response.data;
 		})
 		.then((response: APICategory) => {
-			res.header("Access-Control-Allow-Origin", "*");
 			res.json(response);
 		});
 };

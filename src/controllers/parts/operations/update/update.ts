@@ -1,15 +1,11 @@
 import { Handler } from "express";
 import Map from "../../../../helpers/mapItems";
-import { urlPart } from "../../resources";
 import { APIPart } from "../../../../models/Part/APIPart.model";
-import { AxiosResponse } from "axios";
-
-const axios = require("axios");
-require("dotenv").config();
+import axios, { AxiosResponse } from "axios";
 
 export const updatePart: Handler = (req, res, next) => {
 	axios
-		.put(urlPart, {
+		.put(`${process.env.DB_HOST}/api/part/`, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
 			},

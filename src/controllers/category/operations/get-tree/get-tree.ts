@@ -1,11 +1,11 @@
-import { Handler, Response, response } from "express";
+import { Handler } from "express";
 import { CategoryTree } from "../../../../models/Category/CategoryTree.model";
 import { APICategory } from "../../../../models/Category/Category.model";
 import Map from "../../../../helpers/mapItems";
 import axios, { AxiosResponse } from "axios";
-import { urlCategory } from "../../resources";
 
-require("dotenv").config();
+require("dotenv");
+
 const buildTree = (nodes: APICategory, parent: number | null): APICategory => {
 	return nodes
 		.filter((node) => node.parent === parent)
@@ -15,26 +15,16 @@ const buildTree = (nodes: APICategory, parent: number | null): APICategory => {
 		});
 };
 
-const getCategories = async (): Promise<APICategory> => {
-	const data = await axios
-		.get(urlCategory, {
+export const getCategoryTree: Handler = async (req, res, next) => {
+	const categories: APICategory = await axios
+		.get(`${process.env.BE_SELF}categories/`, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
 			},
 		})
-		.then((response: AxiosResponse<APICategory>) => {
-			return response.data;
+		.then((data: AxiosResponse) => {
+			return data.data as APICategory;
 		});
-	return data;
-};
-
-export const getCategoryTree: Handler = async (req, res, next) => {
-	try {
-		const categories: APICategory = await getCategories();
-		const tree: CategoryTree = Map.mapTree(buildTree(categories, null));
-		res.header("Access-Control-Allow-Origin", "*");
-		res.json(tree);
-	} catch {
-		console.log(`Error: ${response.statusCode}`);
-	}
+	const tree: CategoryTree = Map.mapTree(buildTree(categories, null));
+	res.json(tree);
 };

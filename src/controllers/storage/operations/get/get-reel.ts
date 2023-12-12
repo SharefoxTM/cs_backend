@@ -25,7 +25,7 @@ const getLowestAvailable = (
 				supplier_part_SKU:
 					loc.supplier_part_detail !== null ? loc.supplier_part_detail.SKU : "",
 			};
-			return reti!;
+			return reti;
 		}
 	}
 };
