@@ -104,15 +104,20 @@ const retrieveReel = async (location_path: string): Promise<StorageResult> => {
 
 const updateMode = async (ip: string, mode: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
-		const client = new net.Socket();
-		client.connect(5050, ip, function () {
-			client.write(JSON.stringify({ type: "vegas", mode: mode }));
+		const socket = new net.Socket();
+		socket.connect(5050, ip, function () {
+			socket.write(JSON.stringify({ type: "vegas", mode: mode }));
 		});
 
-		client.on("data", function (data) {
+		socket.on("data", function (data) {
 			const result = checkData(data, "mode");
-			client.destroy();
+			socket.destroy();
 			resolve(result);
+		});
+
+		socket.on("error", (error) => {
+			socket.destroy();
+			reject();
 		});
 	});
 };
