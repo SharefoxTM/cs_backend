@@ -13,10 +13,8 @@ export const getReelList: Handler = (req, res, next) => {
 				},
 			},
 		)
-		.then((response: AxiosResponse<APIStockLocation[]>) => {
-			return response.data;
-		})
-		.then((response: APIStockLocation[]) => {
-			res.json(Map.mapMovingStock(response));
-		});
+		.then((response: AxiosResponse<APIStockLocation[]>) => response.data)
+		.then((response: APIStockLocation[]) =>
+			res.json(Map.mapMovingStock(response)),
+		);
 };

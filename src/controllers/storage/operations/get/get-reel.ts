@@ -2,11 +2,12 @@ import axios, { AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APIStockLocation } from "../../../../models/Stock/APIStockLocation.model";
 import { MovingStock } from "../../../../models/Stock/MovingStock.model";
-import net from "net";
+import storage from "../../../../middleware/Storage/storage";
 
 const getLowestAvailable = (
 	apiloc: APIStockLocation[],
 ): MovingStock | undefined => {
+	//FIXME: Only select IPs!
 	for (const loc of apiloc) {
 		if (
 			loc.location_detail.name !== "Moving" &&
@@ -40,37 +41,12 @@ export const getReel: Handler = (req, res, next) => {
 				},
 			},
 		)
-		.then((response: AxiosResponse<APIStockLocation[]>) => {
-			return response.data;
-		})
+		.then((response: AxiosResponse<APIStockLocation[]>) => response.data)
 		.then((response: APIStockLocation[]) => {
 			const resp: MovingStock | undefined = getLowestAvailable(response);
 			if (resp !== undefined) {
-				const [ip, row, slot, width] =
-					resp.location_detail_pathstring.split("/");
-				console.log([ip, row, slot, width]);
-				const client = new net.Socket();
-				client.connect(5050, ip, function () {
-					client.write(
-						JSON.stringify({
-							type: "retrieve",
-							ID: "1",
-							rij: row,
-							slot: slot,
-							width: width,
-						}),
-					);
-				});
-
-				client.on("data", function (data) {
-					const recv = JSON.parse(data.toString());
-					console.log(recv);
-					client.destroy();
-				});
-				client.on("error", (error) => {
-					client.destroy();
-					console.log(error.message);
-				});
+				//TODO: Check if status is 200
+				storage.retrieveReel(resp.location_detail_pathstring);
 			}
 			res.json(resp);
 		});
