@@ -2,7 +2,7 @@ import net from "net";
 import { StorageResult } from "../../models/Storage/StorageResult.model";
 
 const checkData = (data: any) => {
-	let result = undefined;
+	let result: StorageResult = { data: "", status: 0 };
 	if (data !== undefined) {
 		const recv = JSON.parse(data.toString());
 
@@ -10,14 +10,12 @@ const checkData = (data: any) => {
 			result = {
 				status: 400,
 				data: recv.error,
-				message: "Failed to store!",
 			};
 		} else {
 			if (recv.out_come === "geen plaats") {
 				result = {
 					status: 400,
 					data: "No slots available!",
-					message: "Failed to store!",
 				};
 			} else {
 				result = {
@@ -33,19 +31,12 @@ const checkData = (data: any) => {
 		result = {
 			status: 404,
 			data: "Connection error!",
-			message: "Failed to read!",
 		};
 	}
 	return result;
 };
-type StoreReelProps = {
-	ip: string;
-	width: string;
-};
-const storeReel = async ({
-	ip,
-	width,
-}: StoreReelProps): Promise<StorageResult> => {
+
+const storeReel = async (ip: string, width: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
 		socket.connect(5050, ip, function () {

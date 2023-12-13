@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import { Handler } from "express";
-import net from "net";
 import { APILocation } from "../../../../models/Location/APILocation.model";
 import storage from "../../../../middleware/Storage/storage";
 import { StorageResult } from "../../../../models/Storage/StorageResult.model";
+import { findOrCreateLocation } from "../../resources";
 
 export const createReel: Handler = async (req, res, next) => {
 	const width = req.body.newReelSelectWidth;
@@ -18,60 +18,39 @@ export const createReel: Handler = async (req, res, next) => {
 				},
 			},
 		)
-		.then((response: AxiosResponse<APILocation>) => {
-			return response.data.name;
-		});
-	const response: StorageResult = await storage.storeReel({ ip, width });
+		.then((response: AxiosResponse<APILocation>) => response.data.name);
 
-	console.log(response);
-	// const client = new net.Socket();
-	// client.connect(5050, ip, function () {
-	// 	client.write(JSON.stringify({ type: "store", ID: "3", width: width }));
-	// });
+	let response: StorageResult = await storage.storeReel(ip, width);
 
-	// client.on("data", async function (data) {
-	// 	const recv = JSON.parse(data.toString());
-	// 	console.log(recv);
+	if (response.status !== 200) {
+		res.status(response.status).json({ error: response.data });
+	} else {
+		const { row, slot } = JSON.parse(response.data);
+		const locationBody = {
+			ip: ip,
+			row: row,
+			slot: slot,
+			width: width,
+		};
 
-	// 	if (recv.type === "error") {
-	// 		res.status(400).json({ error: recv.error });
-	// 	} else {
-	// 		if (recv.out_come === "geen plaats") {
-	// 			res.status(400).json({ error: "No slots available!" });
-	// 		} else {
-	// 			const row = recv.slots[0].rij;
-	// 			const slot = recv.slots[0].slot;
-	// 			const locationBody = {
-	// 				ip: ip,
-	// 				row: row,
-	// 				slot: slot,
-	// 				width: width,
-	// 			};
-	// 			const location = await axios
-	// 				.post(`${process.env.SELF}location/`, locationBody)
-	// 				.then((resp: AxiosResponse) => resp.data);
-	// 			const body = {
-	// 				location: await location.pk,
-	// 				part: req.body.part,
-	// 				quantity: qty,
-	// 				supplier_part: sp,
-	// 			};
-	// 			axios
-	// 				.post(`${process.env.DB_HOST}/api/stock/`, body, {
-	// 					headers: {
-	// 						Authorization: process.env.DB_TOKEN,
-	// 					},
-	// 				})
-	// 				.then((resp) => {
-	// 					return resp.data;
-	// 				})
-	// 				.then((data) => res.json(data));
-	// 		}
-	// 	}
-	// 	client.destroy();
-	// });
-	// client.on("error", (error) => {
-	// 	client.destroy();
-	// 	console.log(error.message);
-	// });
+		const location = await findOrCreateLocation(locationBody, response);
+		if (!location) {
+			res.status(response.status).json({ message: response.data });
+		} else {
+			const body = {
+				location: location as number,
+				part: req.body.part,
+				quantity: qty,
+				supplier_part: sp,
+			};
+			response.data = await axios
+				.post(`${process.env.DB_HOST}/api/stock/`, body, {
+					headers: {
+						Authorization: process.env.DB_TOKEN,
+					},
+				})
+				.then((resp) => resp.data);
+			res.status(response.status).json({ message: response.data });
+		}
+	}
 };
