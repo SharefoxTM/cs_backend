@@ -4,6 +4,7 @@ import { Handler } from "express";
 const findOrCreate = async (
 	name: string,
 	parent: number | null,
+	structural: boolean,
 ): Promise<number> => {
 	let query = `${process.env.DB_HOST}/api/stock/location/?name=${name}`;
 
@@ -25,7 +26,7 @@ const findOrCreate = async (
 				return await axios
 					.post(
 						`${process.env.DB_HOST}/api/stock/location/`,
-						{ name: name, parent: parent },
+						{ name: name, parent: parent, structural: structural },
 						{
 							headers: {
 								Authorization: process.env.DB_TOKEN,
@@ -49,8 +50,8 @@ export const createLocation: Handler = async (req, res, next) => {
 	const slot = req.body.slot;
 	const width = req.body.width;
 	console.log([ip, row, slot, width]);
-	let pk = await findOrCreate(ip, null);
-	pk = await findOrCreate(row, pk);
-	pk = await findOrCreate(slot, pk);
-	res.json({ pk: await findOrCreate(width, pk) });
+	let pk = await findOrCreate(ip, null, true);
+	pk = await findOrCreate(row, pk, true);
+	pk = await findOrCreate(slot, pk, true);
+	res.json({ pk: await findOrCreate(width, pk, false) });
 };

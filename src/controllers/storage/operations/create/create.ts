@@ -54,3 +54,10 @@ export const createReel: Handler = async (req, res, next) => {
 		}
 	}
 };
+
+export const initStorage: Handler = (req, res, next) => {
+	if (req.body.pk) {
+		storage.initialiseStorage(req.body.pk);
+		res.status(200).json({ init: "Succes!" });
+	} else res.status(400).json({ init: "No pk defined!" });
+};
