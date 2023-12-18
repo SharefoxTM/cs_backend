@@ -2,7 +2,6 @@ import net from "net";
 import { StorageResult } from "../../models/Storage/StorageResult.model";
 import axios, { AxiosResponse } from "axios";
 import { APILocation } from "../../models/Location/APILocation.model";
-import { rejects } from "assert";
 
 const checkData = (data: any, type: "store" | "retrieve" | "mode") => {
 	let result: StorageResult = { data: "", status: 0 };
@@ -120,7 +119,7 @@ const updateMode = async (ip: string, mode: string): Promise<StorageResult> => {
 
 		socket.on("error", (error) => {
 			socket.destroy();
-			reject();
+			reject(error);
 		});
 	});
 };
@@ -145,41 +144,48 @@ const getSlotPKs = async (storagePK: string[]): Promise<string[]> => {
 			},
 		}),
 	);
-	return (await axios
-		.all(requests)
-		.then((responses: any) =>
-			responses.map(
-				(responseLocations: AxiosResponse<APILocation[]>) =>
-					responseLocations.data,
-			),
-		)
-		.then((response: any) => response)
-		.then((data: APILocation[][]) =>
-			data.map((locations: APILocation[]) =>
-				locations.map((location) => location.pk),
-			),
-		)) as string[];
+	return (
+		(await axios
+			.all(requests)
+			.then((responses: any) =>
+				responses.map(
+					(responseLocations: AxiosResponse<APILocation[]>) =>
+						responseLocations.data,
+				),
+			)
+			// .then((response: any) => response)
+			.then((data: APILocation[][]) =>
+				data.map((locations: APILocation[]) =>
+					locations.map((location) => location.pk),
+				),
+			)) as string[]
+	);
 };
 
 const getWidthPathstrings = async (SlotPKs: string[]): Promise<string[]> => {
 	const requests = SlotPKs.map((pk) =>
-		axios.get(`${process.env.DB_HOST}/api/stock/location/${pk}/`, {
+		axios.get(`${process.env.DB_HOST}/api/stock/location/?parent=${pk}`, {
 			headers: {
 				Authorization: process.env.DB_TOKEN,
 			},
 		}),
 	);
-	return axios
-		.all(requests)
-		.then((responses: AxiosResponse<APILocation[]>[]) =>
-			responses.map((responseLocations) => responseLocations.data),
-		)
-		.then((response: any) => response.data)
-		.then((data: APILocation[]) =>
-			data.map(
-				(location: APILocation) => location.pathstring.toString() as string,
-			),
-		);
+	return (
+		(await axios
+			.all(requests)
+			.then((responses: any) =>
+				responses.map(
+					(responseLocations: AxiosResponse<APILocation[]>) =>
+						responseLocations.data,
+				),
+			)
+			// .then((response: any) => response)
+			.then((data: APILocation[][]) =>
+				data.map((locations: APILocation[]) =>
+					locations.map((location) => location.pathstring),
+				),
+			)) as string[]
+	);
 };
 
 const initialiseStorage = async (storagePk: string) => {
@@ -187,10 +193,13 @@ const initialiseStorage = async (storagePk: string) => {
 	const shelvePKs: string[] = await getShelvePKs(storagePk);
 	const slotPKArrays: string[] = await getSlotPKs(shelvePKs);
 	const slotPKs = slotPKArrays.flat(1);
-	console.log(slotPKs);
-
 	const widthPSs: string[] = await getWidthPathstrings(slotPKs);
-	console.log(widthPSs);
+	const paths = widthPSs.flat(1);
+	console.log(paths.length);
+	paths.map((path: string) => {
+		const [ip, shelve, slot, width] = path.split("/");
+		storeReel(ip, width);
+	});
 };
 
 export default {
