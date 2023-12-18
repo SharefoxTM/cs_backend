@@ -7,6 +7,8 @@ export const PartRouter = Router();
 PartRouter.route("/").get(PartController.getAllParts);
 //.post(PartController.createCategory);
 
+PartRouter.route("/paginated/").get(PartController.getPaginatedParts);
+
 PartRouter.route("/:folder/:type/:id").get(PartController.getImage);
 
 PartRouter.route("/:id").get(PartController.getPart);
