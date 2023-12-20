@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import axios, { AxiosResponse } from "axios";
 import { APIPart } from "../../../../models/Part/APIPart.model";
-import Map from "../../../../helpers/mapItems";
+import Map from "../../../../helpers/mapItems.helper";
 
 export const getPart: Handler = (req, res, next) => {
 	if (!req.params.id) {

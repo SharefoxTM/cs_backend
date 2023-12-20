@@ -20,7 +20,7 @@ export const findOrCreateLocation = (
 				console.log(e.message);
 				response.status = 400;
 				response.data = e.message;
-				reject();
+				reject(e);
 			}),
 	);
 };

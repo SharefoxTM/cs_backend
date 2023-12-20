@@ -1,5 +1,5 @@
 import { Handler } from "express";
-import Map from "../../../../helpers/mapItems";
+import Map from "../../../../helpers/mapItems.helper";
 import { APIPart } from "../../../../models/Part/APIPart.model";
 import axios, { AxiosResponse } from "axios";
 

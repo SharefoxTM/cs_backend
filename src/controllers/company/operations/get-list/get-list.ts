@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APISupplierPart } from "../../../../models/Company/APISupplierPart.model";
 import { APISupplier } from "../../../../models/Company/APISupplier.model";
-import Map from "../../../../helpers/mapItems";
+import Map from "../../../../helpers/mapItems.helper";
 
 export const getSupplierPartList: Handler = (req, res, next) => {
 	axios

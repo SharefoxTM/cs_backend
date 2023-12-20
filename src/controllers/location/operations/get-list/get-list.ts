@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import { APILocation } from "../../../../models/Location/APILocation.model";
 import axios, { AxiosResponse } from "axios";
-import Map from "../../../../helpers/mapItems";
+import Map from "../../../../helpers/mapItems.helper";
 
 export const getStorageIPs: Handler = (req, res, next) => {
 	axios

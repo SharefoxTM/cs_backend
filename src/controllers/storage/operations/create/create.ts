@@ -6,12 +6,12 @@ import { StorageResult } from "../../../../models/Storage/StorageResult.model";
 import { findOrCreateLocation } from "../../resources";
 
 export const createReel: Handler = async (req, res, next) => {
-	const width = req.body.newReelSelectWidth;
+	const width = req.body.newReelSelectWidth.value;
 	const qty = req.body.newReelQty;
-	const sp = req.body.newReelSelectSP;
+	const sp = req.body.newReelSelectSP.value;
 	const ip = await axios
 		.get(
-			`${process.env.DB_HOST}/api/stock/location/${req.body.newReelSelectIP}/`,
+			`${process.env.DB_HOST}/api/stock/location/${req.body.newReelSelectIP.value}/`,
 			{
 				headers: {
 					Authorization: process.env.DB_TOKEN,
@@ -39,7 +39,7 @@ export const createReel: Handler = async (req, res, next) => {
 		} else {
 			const body = {
 				location: location as number,
-				part: req.body.part,
+				part: req.body.part.value,
 				quantity: qty,
 				supplier_part: sp,
 			};

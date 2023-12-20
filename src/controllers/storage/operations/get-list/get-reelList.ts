@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APIStockLocation } from "../../../../models/Stock/APIStockLocation.model";
-import Map from "../../../../helpers/mapItems";
+import Map from "../../../../helpers/mapItems.helper";
 
 export const getReelList: Handler = (req, res, next) => {
 	axios

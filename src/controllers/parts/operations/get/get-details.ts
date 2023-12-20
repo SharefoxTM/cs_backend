@@ -1,6 +1,6 @@
 import { Handler } from "express";
 import axios, { AxiosResponse } from "axios";
-import Map from "../../../../helpers/mapItems";
+import Map from "../../../../helpers/mapItems.helper";
 import { APIPartParameter } from "../../../../models/Parameters/APIPartParameter.model";
 import { APIPartStock } from "../../../../models/Stock/APIPartStock.model";
 import { APIBuildOrder } from "../../../../models/BuildOrder/APIBuildOrder.model";

@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import { CategoryTree } from "../../../../models/Category/CategoryTree.model";
 import { APICategory } from "../../../../models/Category/Category.model";
-import Map from "../../../../helpers/mapItems";
+import Map from "../../../../helpers/mapItems.helper";
 import axios, { AxiosResponse } from "axios";
 
 require("dotenv");

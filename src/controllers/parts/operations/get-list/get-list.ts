@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APIPart } from "../../../../models/Part/APIPart.model";
-import Map from "../../../../helpers/mapItems";
+import Map from "../../../../helpers/mapItems.helper";
 import { Part } from "../../../../models/Part/Part.model";
 
 export const getAllParts: Handler = async (req, res, next) => {

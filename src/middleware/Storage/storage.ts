@@ -1,59 +1,6 @@
 import net from "net";
 import { StorageResult } from "../../models/Storage/StorageResult.model";
-import axios, { AxiosResponse } from "axios";
-import { APILocation } from "../../models/Location/APILocation.model";
-
-const checkData = (data: any, type: "store" | "retrieve" | "mode") => {
-	let result: StorageResult = { data: "", status: 0 };
-	if (data !== undefined) {
-		if (type === "store") {
-			const recv = JSON.parse(data.toString());
-			if (recv.type === "error") {
-				result = {
-					status: 400,
-					data: recv.error,
-				};
-			} else {
-				if (recv.out_come === "geen plaats") {
-					result = {
-						status: 400,
-						data: "No slots available!",
-					};
-				} else {
-					result = {
-						status: 200,
-						data: JSON.stringify({
-							row: recv.slots[0].rij,
-							slot: recv.slots[0].slot,
-						}),
-					};
-				}
-			}
-		} else if (type === "retrieve") {
-			if (data.out_come === "uitgenomen")
-				result = {
-					status: 200,
-					data: "Success",
-				};
-			else
-				result = {
-					status: 400,
-					data: "Error: already taken out!",
-				};
-		} else {
-			result = {
-				status: 200,
-				data: "Success",
-			};
-		}
-	} else {
-		result = {
-			status: 404,
-			data: "Connection error!",
-		};
-	}
-	return result;
-};
+import storageHelper from "../../helpers/storage.helper";
 
 const storeReel = async (ip: string, width: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
@@ -63,14 +10,14 @@ const storeReel = async (ip: string, width: string): Promise<StorageResult> => {
 		});
 
 		socket.on("data", (data) => {
-			const result = checkData(data, "store");
+			const result = storageHelper.checkData(data, "store");
 			socket.destroy();
 			resolve(result);
 		});
 
 		socket.on("error", (error) => {
 			socket.destroy();
-			reject();
+			reject(error);
 		});
 	});
 };
@@ -92,14 +39,14 @@ const retrieveReel = async (location_path: string): Promise<StorageResult> => {
 		});
 
 		socket.on("data", (data) => {
-			const result = checkData(data, "retrieve");
+			const result = storageHelper.checkData(data, "retrieve");
 			socket.destroy();
 			resolve(result);
 		});
 
 		socket.on("error", (error) => {
 			socket.destroy();
-			reject();
+			reject(error);
 		});
 	});
 };
@@ -112,7 +59,7 @@ const updateMode = async (ip: string, mode: string): Promise<StorageResult> => {
 		});
 
 		socket.on("data", function (data) {
-			const result = checkData(data, "mode");
+			const result = storageHelper.checkData(data, "mode");
 			socket.destroy();
 			resolve(result);
 		});
@@ -124,78 +71,12 @@ const updateMode = async (ip: string, mode: string): Promise<StorageResult> => {
 	});
 };
 
-const getShelvePKs = async (storagePK: string): Promise<string[]> => {
-	return axios
-		.get(`${process.env.DB_HOST}/api/stock/location/?parent=${storagePK}`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		})
-		.then((response: AxiosResponse<APILocation[]>) => response.data)
-		.then((locations: APILocation[]) =>
-			locations.map((location) => location.pk.toString() as string),
-		);
-};
-const getSlotPKs = async (storagePK: string[]): Promise<string[]> => {
-	const requests = storagePK.map((pk) =>
-		axios.get(`${process.env.DB_HOST}/api/stock/location/?parent=${pk}`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		}),
-	);
-	return (
-		(await axios
-			.all(requests)
-			.then((responses: any) =>
-				responses.map(
-					(responseLocations: AxiosResponse<APILocation[]>) =>
-						responseLocations.data,
-				),
-			)
-			// .then((response: any) => response)
-			.then((data: APILocation[][]) =>
-				data.map((locations: APILocation[]) =>
-					locations.map((location) => location.pk),
-				),
-			)) as string[]
-	);
-};
-
-const getWidthPathstrings = async (SlotPKs: string[]): Promise<string[]> => {
-	const requests = SlotPKs.map((pk) =>
-		axios.get(`${process.env.DB_HOST}/api/stock/location/?parent=${pk}`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		}),
-	);
-	return (
-		(await axios
-			.all(requests)
-			.then((responses: any) =>
-				responses.map(
-					(responseLocations: AxiosResponse<APILocation[]>) =>
-						responseLocations.data,
-				),
-			)
-			// .then((response: any) => response)
-			.then((data: APILocation[][]) =>
-				data.map((locations: APILocation[]) =>
-					locations.map((location) => location.pathstring),
-				),
-			)) as string[]
-	);
-};
-
 const initialiseStorage = async (storagePk: string) => {
-	// storageIP/storageshelve/storageSlot/storageWidth
-	const shelvePKs: string[] = await getShelvePKs(storagePk);
-	const slotPKArrays: string[] = await getSlotPKs(shelvePKs);
-	const slotPKs = slotPKArrays.flat(1);
-	const widthPSs: string[] = await getWidthPathstrings(slotPKs);
-	const paths = widthPSs.flat(1);
-	console.log(paths.length);
+	const shelvePKs: string[] = await storageHelper.getShelvePKs(storagePk);
+	const slotPKs: string[] = (await storageHelper.getSlotPKs(shelvePKs)).flat(1);
+	const paths: string[] = (
+		await storageHelper.getWidthPathstrings(slotPKs)
+	).flat(1);
 	paths.map((path: string) => {
 		const [ip, shelve, slot, width] = path.split("/");
 		storeReel(ip, width);
