@@ -6,7 +6,9 @@ const storeReel = async (ip: string, width: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
 		socket.connect(5050, ip, function () {
-			socket.write(JSON.stringify({ type: "store", ID: "3", width: width }));
+			socket.write(
+				JSON.stringify({ type: "store", ID: "3", width: `${width}` }),
+			);
 		});
 
 		socket.on("data", (data) => {

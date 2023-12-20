@@ -30,14 +30,14 @@ const checkData = (data: any, type: "store" | "retrieve" | "mode") => {
 	let result: StorageResult = { data: "", status: 0 };
 	if (data !== undefined) {
 		if (type === "store") {
-			const recv = JSON.parse(data.toString());
-			if (recv.type === "error") {
+			const parsedResult = JSON.parse(data.toString());
+			if (parsedResult.type === "error") {
 				result = {
 					status: 400,
-					data: recv.error,
+					data: parsedResult.error,
 				};
 			} else {
-				if (recv.out_come === "geen plaats") {
+				if (parsedResult.out_come === "geen plaats") {
 					result = {
 						status: 400,
 						data: "No slots available!",
@@ -46,8 +46,8 @@ const checkData = (data: any, type: "store" | "retrieve" | "mode") => {
 					result = {
 						status: 200,
 						data: JSON.stringify({
-							row: recv.slots[0].rij,
-							slot: recv.slots[0].slot,
+							row: parsedResult.slots[0].rij,
+							slot: parsedResult.slots[0].slot,
 						}),
 					};
 				}
