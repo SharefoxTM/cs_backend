@@ -1,6 +1,6 @@
 import net from "net";
 import { StorageResult } from "../../models/Storage/StorageResult.model";
-import storageHelper from "../../helpers/storage.helper";
+import S from "../../controllers/storage/resources";
 
 const storeReel = async (ip: string, width: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
@@ -10,7 +10,7 @@ const storeReel = async (ip: string, width: string): Promise<StorageResult> => {
 		});
 
 		socket.on("data", (data) => {
-			const result = storageHelper.checkData(data, "store");
+			const result = S.checkData(data, "store");
 			socket.destroy();
 			resolve(result);
 		});
@@ -39,7 +39,7 @@ const retrieveReel = async (location_path: string): Promise<StorageResult> => {
 		});
 
 		socket.on("data", (data) => {
-			const result = storageHelper.checkData(data, "retrieve");
+			const result = S.checkData(data, "retrieve");
 			socket.destroy();
 			resolve(result);
 		});
@@ -59,7 +59,7 @@ const updateMode = async (ip: string, mode: string): Promise<StorageResult> => {
 		});
 
 		socket.on("data", function (data) {
-			const result = storageHelper.checkData(data, "mode");
+			const result = S.checkData(data, "mode");
 			socket.destroy();
 			resolve(result);
 		});
@@ -72,11 +72,9 @@ const updateMode = async (ip: string, mode: string): Promise<StorageResult> => {
 };
 
 const initialiseStorage = async (storagePk: string) => {
-	const shelvePKs: string[] = await storageHelper.getShelvePKs(storagePk);
-	const slotPKs: string[] = (await storageHelper.getSlotPKs(shelvePKs)).flat(1);
-	const paths: string[] = (
-		await storageHelper.getWidthPathstrings(slotPKs)
-	).flat(1);
+	const shelvePKs: string[] = await S.getShelvePKs(storagePk);
+	const slotPKs: string[] = (await S.getSlotPKs(shelvePKs)).flat(1);
+	const paths: string[] = (await S.getWidthPathstrings(slotPKs)).flat(1);
 	paths.map((path: string) => {
 		const [ip, shelve, slot, width] = path.split("/");
 		storeReel(ip, width);

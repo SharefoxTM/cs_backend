@@ -49,7 +49,6 @@ export const createLocation: Handler = async (req, res, next) => {
 	const row = req.body.row;
 	const slot = req.body.slot;
 	const width = req.body.width;
-	console.log([ip, row, slot, width]);
 	let pk = await findOrCreate(ip, null, true);
 	pk = await findOrCreate(row, pk, true);
 	pk = await findOrCreate(slot, pk, true);

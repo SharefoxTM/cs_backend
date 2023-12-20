@@ -1,25 +1,14 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { Handler } from "express";
-import { APILocation } from "../../../../models/Location/APILocation.model";
 import storage from "../../../../middleware/Storage/storage";
 import { StorageResult } from "../../../../models/Storage/StorageResult.model";
-import { findOrCreateLocation } from "../../resources";
+import S from "../../resources";
 
 export const createReel: Handler = async (req, res, next) => {
 	const width = req.body.newReelSelectWidth.value;
 	const qty = req.body.newReelQty;
 	const sp = req.body.newReelSelectSP.value;
-	const ip = await axios
-		.get(
-			`${process.env.DB_HOST}/api/stock/location/${req.body.newReelSelectIP.value}/`,
-			{
-				headers: {
-					Authorization: process.env.DB_TOKEN,
-				},
-			},
-		)
-		.then((response: AxiosResponse<APILocation>) => response.data.name);
-
+	const ip = req.body.newReelSelectIP.label;
 	let response: StorageResult = await storage.storeReel(ip, width);
 
 	if (response.status !== 200) {
@@ -33,7 +22,7 @@ export const createReel: Handler = async (req, res, next) => {
 			width: width,
 		};
 
-		const location = await findOrCreateLocation(locationBody, response);
+		const location = await S.findOrCreateLocation(locationBody, response);
 		if (!location) {
 			res.status(response.status).json({ message: response.data });
 		} else {

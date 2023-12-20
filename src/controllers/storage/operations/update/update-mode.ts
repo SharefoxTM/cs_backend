@@ -8,7 +8,6 @@ export const updateMode: Handler = (req, res) => {
 			.updateMode(req.body.ip, req.body.mode)
 			.then(() => res.status(200).json("Success!"))
 			.catch((error) => {
-				console.log(error);
 				res.status(400).json(error);
 			});
 	} else res.status(400).json("Data incorrect!");
