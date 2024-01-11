@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Handler } from "express";
 
-export const getImage: Handler = async (req, res, next) => {
+export const getFile: Handler = async (req, res, next) => {
 	if (!req.params.id) {
 		return res.status(400).json({ error: "No ID found!" });
 	}
@@ -20,7 +20,7 @@ export const getImage: Handler = async (req, res, next) => {
 
 		response.data.pipe(res);
 	} catch (error) {
-		console.error("Error fetching image:", error);
+		console.error("Error fetching image: %s", error);
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };

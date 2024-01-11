@@ -9,8 +9,6 @@ PartRouter.route("/").get(PartController.getAllParts);
 
 PartRouter.route("/paginated/").get(PartController.getPaginatedParts);
 
-PartRouter.route("/:folder/:type/:id").get(PartController.getImage);
-
 PartRouter.route("/:id").get(PartController.getPart);
 //	.put(PartController.updatePart);
 // 	.delete(PartController.deleteCategory);

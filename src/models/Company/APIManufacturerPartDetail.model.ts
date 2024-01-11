@@ -1,9 +1,9 @@
 import { APIManufacturerDetail } from "./APIManufacturerDetail.model";
 
 export type APIManufacturerPartDetail = {
-	pk: 0;
-	part: 0;
-	manufacturer: 0;
+	pk: number;
+	part: number;
+	manufacturer: number;
 	manufacturer_detail: APIManufacturerDetail;
 	description: string;
 	MPN: string;
