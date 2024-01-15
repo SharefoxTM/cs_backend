@@ -4,8 +4,9 @@ import PartController from "../controllers/parts/parts.controller";
 export const PartRouter = Router();
 // TODO: Check op id doen om te kijken of het een number is
 
-PartRouter.route("/").get(PartController.getAllParts);
-//.post(PartController.createCategory);
+PartRouter.route("/")
+	.get(PartController.getAllParts)
+	.post(PartController.createPart);
 
 PartRouter.route("/paginated/").get(PartController.getPaginatedParts);
 

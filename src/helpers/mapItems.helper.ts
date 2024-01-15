@@ -16,6 +16,7 @@ import { APILocation } from "../models/Location/APILocation.model";
 import { APILocationDetail } from "../models/Location/APILocationDetail.model";
 import { APISupplier } from "../models/Company/APISupplier.model";
 import { APISupplierDetail } from "../models/Company/APISupplierDetail.model";
+import validator from "./validateItems.helper";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
@@ -139,7 +140,7 @@ const mapQuery = (req: Request): PartQuery => {
 };
 
 const mapPart = (apiPart: APIPart): Part => {
-	const parts: Part = {
+	const part: Part = {
 		active: apiPart.active,
 		assembly: apiPart.assembly,
 		barcode_hash: apiPart.barcode_hash,
@@ -179,50 +180,11 @@ const mapPart = (apiPart: APIPart): Part => {
 		variant_stock: apiPart.variant_stock,
 		tags: apiPart.tags,
 	};
-	return parts;
+	return part;
 };
 
 const mapParts = (apiParts: APIPart[]): Part[] => {
-	const parts: Part[] = apiParts.map((part) => ({
-		active: part.active,
-		assembly: part.assembly,
-		barcode_hash: part.barcode_hash,
-		category: part.category,
-		component: part.component,
-		default_expiry: part.default_expiry,
-		default_location: part.default_location,
-		default_supplier: part.default_location,
-		description: part.description,
-		full_name: part.full_name,
-		image: part.image,
-		IPN: part.IPN,
-		is_template: part.is_template,
-		keywords: part.keywords,
-		minimum_stock: part.minimum_stock,
-		name: part.name,
-		pk: part.pk,
-		purchaseable: part.purchaseable,
-		revision: part.revision,
-		salable: part.salable,
-		starred: part.starred,
-		trackable: part.trackable,
-		units: part.units,
-		variant_of: part.variant_of,
-		virtual: part.virtual,
-		responsible: part.responsible,
-		allocated_to_build_orders: part.allocated_to_build_orders,
-		allocated_to_sales_orders: part.allocated_to_sales_orders,
-		building: part.building,
-		in_stock: part.in_stock,
-		ordering: part.ordering,
-		required_for_build_orders: part.required_for_build_orders,
-		stock_item_count: part.stock_item_count,
-		suppliers: part.suppliers,
-		total_in_stock: part.total_in_stock,
-		unallocated_stock: part.unallocated_stock,
-		variant_stock: part.variant_stock,
-		tags: part.tags,
-	}));
+	const parts: Part[] = apiParts.map((part) => mapPart(part));
 	return parts;
 };
 
@@ -335,20 +297,9 @@ const mapMovingStock = (apistock: APIStockLocation[]): MovingStock[] => {
 	return ms;
 };
 
-const validateIP = (ip: string): boolean => {
-	if (
-		/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
-			ip,
-		)
-	) {
-		return true;
-	}
-	return false;
-};
-
 const mapIPs = (apilocation: APILocation[]): APILocationDetail[] => {
 	const ip: APILocationDetail[] = apilocation
-		.filter((al) => validateIP(al.name))
+		.filter((al) => validator.ip(al.name))
 		.map((al) => ({
 			pk: al.pk,
 			name: al.name,
