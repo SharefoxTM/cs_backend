@@ -1,4 +1,4 @@
-// import { createCategory } from "./operations/create/create";
+import { createCategory } from "./operations/create/create";
 // import { deleteCategory } from "./operations/delete/delete";
 import { getAllCategories } from "./operations/get-list/get-list";
 import { getCategory } from "./operations/get/get";
@@ -9,7 +9,7 @@ export default {
 	getAllCategories,
 	getCategory,
 	getCategoryTree,
-	// createCategory,
+	createCategory,
 	// updateCategory,
 	// deleteCategory,
 };
