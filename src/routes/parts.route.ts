@@ -10,8 +10,9 @@ PartRouter.route("/")
 
 PartRouter.route("/paginated/").get(PartController.getPaginatedParts);
 
-PartRouter.route("/:id").get(PartController.getPart);
-//	.put(PartController.updatePart);
+PartRouter.route("/:id")
+	.get(PartController.getPart)
+	.put(PartController.updatePart);
 // 	.delete(PartController.deleteCategory);
 
 PartRouter.route("/:id/:detailTopic").get(PartController.getDetails);

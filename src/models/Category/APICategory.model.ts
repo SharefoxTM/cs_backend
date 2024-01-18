@@ -1,4 +1,4 @@
-export type NewCategory = {
+export type APICategory = {
 	name: string;
 	description?: string;
 	default_location?: number;

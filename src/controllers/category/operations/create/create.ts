@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import Ajv, { JSONSchemaType } from "ajv";
-import { NewCategory } from "../../../../models/Category/NewCategory.model";
+import { APICategory } from "../../../../models/Category/APICategory.model";
 
-const schema: JSONSchemaType<NewCategory> = {
+const schema: JSONSchemaType<APICategory> = {
 	type: "object",
 	properties: {
 		name: { type: "string", maxLength: 100 },
@@ -33,7 +33,7 @@ export const createCategory: Handler = async (req, res, next) => {
 				return response.data;
 			})
 			.then((response: any) => {
-				res.json(response);
+				res.status(201).json(response);
 			})
 			.catch((err: AxiosError) => res.status(err.status || 400).json(err));
 	} else {
