@@ -4,6 +4,7 @@ import { getPart } from "./operations/get/get";
 import { updatePart } from "./operations/update/update";
 import { getDetails } from "./operations/get/get-details";
 import { createPart } from "./operations/create/create";
+import { deletePart } from "./operations/delete/delete";
 
 export default {
 	getAllParts,
@@ -12,5 +13,5 @@ export default {
 	getDetails,
 	createPart,
 	updatePart,
-	// deleteCategory,
+	deletePart,
 };

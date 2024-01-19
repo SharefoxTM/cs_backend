@@ -12,7 +12,7 @@ PartRouter.route("/paginated/").get(PartController.getPaginatedParts);
 
 PartRouter.route("/:id")
 	.get(PartController.getPart)
-	.put(PartController.updatePart);
-// 	.delete(PartController.deleteCategory);
+	.put(PartController.updatePart)
+	.delete(PartController.deletePart);
 
 PartRouter.route("/:id/:detailTopic").get(PartController.getDetails);
