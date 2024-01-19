@@ -1,19 +1,16 @@
 import { Handler } from "express";
 import { APILocation } from "../../../../models/Location/APILocation.model";
-import axios, { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems.helper";
+import { inventree } from "../../../../server";
 
 export const getStorageIPs: Handler = (req, res, next) => {
-	axios
-		.get(`${process.env.DB_HOST}/api/stock/location/?parent=null`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
+	inventree
+		.get(`api/stock/location/?parent=null`)
+		.then(async (response: AxiosResponse<APILocation[]>) => {
+			res.json(Map.mapIPs(response.data));
 		})
-		.then((response: AxiosResponse<APILocation[]>) => {
-			return response.data;
-		})
-		.then(async (response: APILocation[]) => {
-			res.json(Map.mapIPs(response));
-		});
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };

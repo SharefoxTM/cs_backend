@@ -1,5 +1,6 @@
-import axios from "axios";
 import { Handler } from "express";
+import { inventree } from "../../../../server";
+import { AxiosError, AxiosResponse } from "axios";
 
 export const getFile: Handler = async (req, res, next) => {
 	if (!req.params.id) {
@@ -7,20 +8,12 @@ export const getFile: Handler = async (req, res, next) => {
 	}
 
 	res.type("img/jpeg");
-	try {
-		const url =
-			process.env.DB_HOST +
-			`/${req.params.folder}/${req.params.type}/${req.params.id}`;
-		const response = await axios.get(url, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
+	inventree
+		.get(`${req.params.folder}/${req.params.type}/${req.params.id}`, {
 			responseType: "stream",
-		});
-
-		response.data.pipe(res);
-	} catch (error) {
-		console.error("Error fetching image: %s", error);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
+		})
+		.then((response: AxiosResponse) => response.data.pipe(res))
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };

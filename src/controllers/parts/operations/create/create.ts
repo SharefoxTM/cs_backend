@@ -1,8 +1,9 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import { NewPart } from "../../../../models/Part/NewPart.model";
 import Ajv, { JSONSchemaType } from "ajv";
 import addFormats from "ajv-formats";
+import { inventree } from "../../../../server";
 
 const schema: JSONSchemaType<NewPart> = {
 	type: "object",
@@ -66,19 +67,14 @@ const validate = ajv.compile(schema);
 
 export const createPart: Handler = async (req, res, next) => {
 	if (validate(req.body)) {
-		axios
-			.post(`${process.env.DB_HOST}/api/part/`, req.body, {
-				headers: {
-					Authorization: process.env.DB_TOKEN,
-				},
-			})
+		inventree
+			.post(`api/part/`, req.body)
 			.then((response: AxiosResponse) => {
-				return response.data;
+				res.json(response.data);
 			})
-			.then((response: any) => {
-				res.json(response);
-			})
-			.catch((err: AxiosError) => res.status(err.status || 400).json(err));
+			.catch((err: AxiosError) =>
+				res.status(err.response?.status || 400).json(err.response),
+			);
 	} else {
 		res.status(400).json(validate.errors);
 	}

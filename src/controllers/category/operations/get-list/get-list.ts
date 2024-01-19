@@ -1,20 +1,15 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APICategory } from "../../../../models/Category/Category.model";
-
-require("dotenv");
+import { inventree } from "../../../../server";
 
 export const getAllCategories: Handler = (req, res, next) => {
-	axios
-		.get(`${process.env.DB_HOST}/api/part/category/`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		})
+	inventree
+		.get(`api/part/category/`)
 		.then((response: AxiosResponse<APICategory>) => {
-			return response.data;
+			res.json(response.data);
 		})
-		.then((response: APICategory) => {
-			res.json(response);
-		});
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };

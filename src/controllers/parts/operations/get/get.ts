@@ -1,22 +1,19 @@
 import { Handler } from "express";
-import axios, { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { APIPart } from "../../../../models/Part/APIPart.model";
 import Map from "../../../../helpers/mapItems.helper";
+import { inventree } from "../../../../server";
 
 export const getPart: Handler = (req, res, next) => {
 	if (!req.params.id) {
 		throw new Error("Invalid id");
 	}
-	axios
-		.get(`${process.env.DB_HOST}/api/part/${req.params.id}/`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		})
+	inventree
+		.get(`api/part/${req.params.id}/`)
 		.then((response: AxiosResponse<APIPart>) => {
-			return response.data;
+			res.json(Map.mapPart(response.data));
 		})
-		.then((response: APIPart) => {
-			res.json(Map.mapPart(response));
-		});
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };

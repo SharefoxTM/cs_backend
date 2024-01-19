@@ -1,45 +1,31 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosResponse } from "axios";
 import { Handler } from "express";
+import { inventree } from "../../../../server";
 
 const findOrCreate = async (
 	name: string,
 	parent: number | null,
 	structural: boolean,
 ): Promise<number> => {
-	let query = `${process.env.DB_HOST}/api/stock/location/?name=${name}`;
+	let params = {
+		name: name,
+		parent: parent,
+	};
 
-	if (parent !== null) {
-		query += `&parent=${parent}`;
-	}
-
-	const pk: number | undefined = await axios
-		.get(query, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		})
-		.then((response: AxiosResponse) => {
-			return response.data[0];
-		})
-		.then(async (response: any) => {
-			if (!response) {
-				return await axios
-					.post(
-						`${process.env.DB_HOST}/api/stock/location/`,
-						{ name: name, parent: parent, structural: structural },
-						{
-							headers: {
-								Authorization: process.env.DB_TOKEN,
-							},
-						},
-					)
-					.then((response: AxiosResponse) => {
-						return response.data;
+	const pk: number | undefined = await inventree
+		.get(`api/stock/location/`, { params: params })
+		.then(async (response: AxiosResponse<any>) => {
+			if (!response.data[0]) {
+				return await inventree
+					.post(`api/stock/location/`, {
+						name: name,
+						parent: parent,
+						structural: structural,
 					})
-					.then((response: any) => {
-						return response.pk as number;
+					.then((response: AxiosResponse<any>) => {
+						return response.data.pk as number;
 					});
-			} else return response.pk as number;
+			} else return response.data[0].pk as number;
 		});
 	return pk || 0;
 };

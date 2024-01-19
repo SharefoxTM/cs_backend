@@ -1,8 +1,9 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APIStockLocation } from "../../../../models/Stock/APIStockLocation.model";
 import { MovingStock } from "../../../../models/Stock/MovingStock.model";
 import storage from "../../../../middleware/Storage/storage";
+import { inventree } from "../../../../server";
 
 const getLowestAvailable = (
 	apiloc: APIStockLocation[],
@@ -32,22 +33,19 @@ const getLowestAvailable = (
 };
 
 export const getReel: Handler = (req, res, next) => {
-	axios
+	inventree
 		.get(
-			`${process.env.DB_HOST}/api/stock/?location_detail=true&part=${req.params.ID}&supplier_part_detail=true&ordering=quantity`,
-			{
-				headers: {
-					Authorization: process.env.DB_TOKEN,
-				},
-			},
+			`/api/stock/?location_detail=true&part=${req.params.ID}&supplier_part_detail=true&ordering=quantity`,
 		)
-		.then((response: AxiosResponse<APIStockLocation[]>) => response.data)
-		.then((response: APIStockLocation[]) => {
-			const resp: MovingStock | undefined = getLowestAvailable(response);
+		.then((response: AxiosResponse<APIStockLocation[]>) => {
+			const resp: MovingStock | undefined = getLowestAvailable(response.data);
 			if (resp !== undefined) {
 				//TODO: Check if status is 200
 				storage.retrieveReel(resp.location_detail_pathstring);
 			}
 			res.json(resp);
-		});
+		})
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };

@@ -1,8 +1,9 @@
-import axios from "axios";
 import { Handler } from "express";
 import storage from "../../../../middleware/Storage/storage";
 import { StorageResult } from "../../../../models/Storage/StorageResult.model";
 import S from "../../resources";
+import { inventree } from "../../../../server";
+import { AxiosError, AxiosResponse } from "axios";
 
 export const createReel: Handler = async (req, res, next) => {
 	const width = req.body.newReelSelectWidth.value;
@@ -21,7 +22,7 @@ export const createReel: Handler = async (req, res, next) => {
 			slot: slot,
 			width: width,
 		};
-
+		//TODO: try to refactor
 		const location = await S.findOrCreateLocation(locationBody, response);
 		if (!location) {
 			res.status(response.status).json({ message: response.data });
@@ -32,13 +33,13 @@ export const createReel: Handler = async (req, res, next) => {
 				quantity: qty,
 				supplier_part: sp,
 			};
-			response.data = await axios
-				.post(`${process.env.DB_HOST}/api/stock/`, body, {
-					headers: {
-						Authorization: process.env.DB_TOKEN,
-					},
-				})
-				.then((resp) => resp.data);
+
+			response.data = await inventree
+				.post(`api/stock/`, body)
+				.then((resp: AxiosResponse) => resp.data)
+				.catch((err: AxiosError) =>
+					res.status(err.response?.status || 400).json(err.response),
+				);
 			res.status(response.status).json({ message: response.data });
 		}
 	}

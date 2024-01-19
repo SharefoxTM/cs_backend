@@ -1,10 +1,11 @@
 import { Handler } from "express";
-import axios, { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems.helper";
 import { APIPartParameter } from "../../../../models/Parameters/APIPartParameter.model";
 import { APIPartStock } from "../../../../models/Stock/APIPartStock.model";
 import { APIBuildOrder } from "../../../../models/BuildOrder/APIBuildOrder.model";
 import { APIUsedIn } from "../../../../models/UsedIn/APIUsedIn.model";
+import { inventree } from "../../../../server";
 // import { APIPartInternalPrice } from "../../../../models/Part/APIPartInternalPrice.model";
 // import { APIOrderPOLine } from "../../../../models/Order/APIOrderPOLine.model";
 
@@ -13,71 +14,52 @@ export const getDetails: Handler = (req, res, next) => {
 		throw new Error("Invalid id");
 	}
 	const id = req.params.id;
-	let url = process.env.DB_HOST!;
 	switch (req.params.detailTopic) {
 		case "Parameters":
-			url += `/api/part/parameter/?part=${id}`;
-			axios
-				.get(url, {
-					headers: {
-						Authorization: process.env.DB_TOKEN,
-					},
-				})
-				.then((response: AxiosResponse<APIPartParameter[]>) => {
-					return response.data;
-				})
-				.then((response: APIPartParameter[]) => {
-					res.header("Access-Control-Allow-Origin", "*");
-					res.json(response);
-				});
+			inventree
+				.get(`api/part/parameter/?part=${id}`)
+				.then((response: AxiosResponse<APIPartParameter[]>) =>
+					res.json(response.data),
+				)
+				.catch((err: AxiosError) =>
+					res.status(err.response?.status || 400).json(err.response),
+				);
 			break;
 		case "Stock":
-			url += `/api/stock/?part=${id}&supplier_part_detail=true&location_detail=true`;
-			axios
-				.get(url, {
-					headers: {
-						Authorization: process.env.DB_TOKEN,
-					},
-				})
-				.then((response: AxiosResponse<APIPartStock[]>) => {
-					return response.data;
-				})
-				.then((response: APIPartStock[]) => {
-					res.header("Access-Control-Allow-Origin", "*");
-					res.json(Map.mapStock(response));
-				});
+			inventree
+				.get(
+					`/api/stock/?part=${id}&supplier_part_detail=true&location_detail=true`,
+				)
+				.then((response: AxiosResponse<APIPartStock[]>) =>
+					res.json(Map.mapStock(response.data)),
+				)
+				.catch((err: AxiosError) =>
+					res.status(err.response?.status || 400).json(err.response),
+				);
 			break;
 		case "Build Orders":
-			url += `/api/build/item/?part=${req.params.id}&build_detail=true&stock_detail=false&location_detail=false&part_detail=false`;
-			axios
-				.get(url, {
-					headers: {
-						Authorization: process.env.DB_TOKEN,
-					},
-				})
-				.then((response: AxiosResponse<APIBuildOrder[]>) => {
-					return response.data;
-				})
-				.then((response: APIBuildOrder[]) => {
-					res.header("Access-Control-Allow-Origin", "*");
-					res.json(Map.mapBuildOrders(response));
-				});
+			inventree
+				.get(
+					`/api/build/item/?part=${id}&build_detail=true&stock_detail=false&location_detail=false&part_detail=false`,
+				)
+				.then((response: AxiosResponse<APIBuildOrder[]>) =>
+					res.json(Map.mapBuildOrders(response.data)),
+				)
+				.catch((err: AxiosError) =>
+					res.status(err.response?.status || 400).json(err.response),
+				);
 			break;
 		case "Used In":
-			url += `/api/bom/?search=&uses=${req.params.id}&part_detail=true&sub_part_detail=true`;
-			axios
-				.get(url, {
-					headers: {
-						Authorization: process.env.DB_TOKEN,
-					},
-				})
-				.then((response: AxiosResponse<APIUsedIn[]>) => {
-					return response.data;
-				})
-				.then((response: APIUsedIn[]) => {
-					res.header("Access-Control-Allow-Origin", "*");
-					res.json(Map.mapUsedIn(response));
-				});
+			inventree
+				.get(
+					`/api/bom/?search=&uses=${id}&part_detail=true&sub_part_detail=true`,
+				)
+				.then((response: AxiosResponse<APIUsedIn[]>) =>
+					res.json(Map.mapUsedIn(response.data)),
+				)
+				.catch((err: AxiosError) =>
+					res.status(err.response?.status || 400).json(err.response),
+				);
 			break;
 		// case "Pricing-IP":
 		// 	url += `/api/part/internal-price/?part=${req.params.id}`;

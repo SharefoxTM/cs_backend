@@ -1,23 +1,21 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APIPart } from "../../../../models/Part/APIPart.model";
 import Map from "../../../../helpers/mapItems.helper";
 import { Part } from "../../../../models/Part/Part.model";
+import { inventree } from "../../../../server";
 
 export const getAllParts: Handler = async (req, res, next) => {
-	axios
-		.get(`${process.env.DB_HOST}/api/part/`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
+	inventree
+		.get(`api/part/`, {
 			params: req.query,
 		})
 		.then((response: AxiosResponse<APIPart[]>) => {
-			return response.data;
+			res.json(Map.mapParts(response.data));
 		})
-		.then((response: APIPart[]) => {
-			res.json(Map.mapParts(response));
-		});
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };
 
 export const getPaginatedParts: Handler = async (req, res, next) => {
@@ -25,18 +23,12 @@ export const getPaginatedParts: Handler = async (req, res, next) => {
 	const pageSize = parseInt(req.query.pageSize?.toString() || "25");
 	const startIndex = (page - 1) * pageSize;
 	const endIndex = page * pageSize;
-	const parts: Part[] = await axios
-		.get(`${process.env.DB_HOST}/api/part/`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
+	const parts: Part[] = await inventree
+		.get(`api/part/`, {
 			params: req.query,
 		})
 		.then((response: AxiosResponse<APIPart[]>) => {
-			return response.data;
-		})
-		.then((response: APIPart[]) => {
-			return Map.mapParts(response);
+			return Map.mapParts(response.data);
 		});
 	const paginatedParts = parts.slice(startIndex, endIndex);
 	const totalPages = Math.ceil(parts.length / pageSize);

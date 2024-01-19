@@ -1,38 +1,32 @@
-import axios, { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APISupplierPart } from "../../../../models/Company/APISupplierPart.model";
 import { APISupplier } from "../../../../models/Company/APISupplier.model";
 import Map from "../../../../helpers/mapItems.helper";
+import { inventree } from "../../../../server";
 
 export const getSupplierPartList: Handler = (req, res, next) => {
-	axios
-		.get(`${process.env.DB_HOST}/api/company/part/`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
+	inventree
+		.get(`api/company/part/`, {
 			params: req.query,
 		})
 		.then((response: AxiosResponse<APISupplierPart[]>) => {
-			return response.data;
+			res.json(response.data);
 		})
-		.then((response: APISupplierPart[]) => {
-			res.json(response);
-		});
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };
 
 export const getSupplierList: Handler = (req, res, next) => {
-	req.query.is_supplier = "true";
-	axios
-		.get(`${process.env.DB_HOST}/api/company/`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-			params: req.query,
+	inventree
+		.get(`api/company/`, {
+			params: { ...req.query, is_supplier: true },
 		})
 		.then((response: AxiosResponse<APISupplier[]>) => {
-			return response.data;
+			res.json(Map.mapSuppliers(response.data));
 		})
-		.then((response: APISupplier[]) => {
-			res.json(Map.mapSuppliers(response));
-		});
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };

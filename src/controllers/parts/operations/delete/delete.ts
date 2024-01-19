@@ -1,15 +1,14 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
+import { inventree } from "../../../../server";
 
 export const deletePart: Handler = (req, res, next) => {
-	axios
-		.delete(`${process.env.DB_HOST}/api/part/${req.params.id}/`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		})
+	inventree
+		.delete(`api/part/${req.params.id}/`)
 		.then((response: AxiosResponse) =>
 			res.status(response.status).json(response.data),
 		)
-		.catch((err: AxiosError) => res.status(405).json(err));
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response),
+		);
 };

@@ -1,7 +1,8 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import Ajv, { JSONSchemaType } from "ajv";
 import { NewSupplierPart } from "../../../../models/Company/NewSupplierPart.model";
+import { inventree } from "../../../../server";
 
 const schema: JSONSchemaType<NewSupplierPart> = {
 	type: "object",
@@ -27,19 +28,14 @@ const validate = ajv.compile(schema);
 
 export const createSupplierPart: Handler = async (req, res, next) => {
 	if (validate(req.body)) {
-		axios
-			.post(`${process.env.DB_HOST}/api/company/part/`, req.body, {
-				headers: {
-					Authorization: process.env.DB_TOKEN,
-				},
-			})
+		inventree
+			.post(`api/company/part/`, req.body)
 			.then((response: AxiosResponse) => {
-				return response.data;
+				res.json(response.data);
 			})
-			.then((response: any) => {
-				res.json(response);
-			})
-			.catch((err: AxiosError) => res.status(err.status || 400).json(err));
+			.catch((err: AxiosError) =>
+				res.status(err.response?.status || 400).json(err.response),
+			);
 	} else {
 		res.status(400).json(validate.errors);
 	}
