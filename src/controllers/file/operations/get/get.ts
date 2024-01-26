@@ -2,7 +2,7 @@ import { Handler } from "express";
 import { inventree } from "../../../../server";
 import { AxiosError, AxiosResponse } from "axios";
 
-export const getFile: Handler = async (req, res, next) => {
+export const getFile: Handler = (req, res) => {
 	if (!req.params.id) {
 		return res.status(400).json({ error: "No ID found!" });
 	}

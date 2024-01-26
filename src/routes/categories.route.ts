@@ -2,7 +2,6 @@ import { Router } from "express";
 import CategoryController from "../controllers/category/categories.controller";
 
 export const CategoryRouter = Router();
-// TODO: Check op id doen om te kijken of het een number is
 
 CategoryRouter.route("/")
 	.get(CategoryController.getAllCategories)

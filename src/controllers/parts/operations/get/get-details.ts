@@ -9,7 +9,7 @@ import { inventree } from "../../../../server";
 // import { APIPartInternalPrice } from "../../../../models/Part/APIPartInternalPrice.model";
 // import { APIOrderPOLine } from "../../../../models/Order/APIOrderPOLine.model";
 
-export const getDetails: Handler = (req, res, next) => {
+export const getDetails: Handler = (req, res) => {
 	if (!req.params.id) {
 		throw new Error("Invalid id");
 	}

@@ -1,5 +1,4 @@
 import { Handler } from "express";
-import { CategoryTree } from "../../../../models/Category/CategoryTree.model";
 import { APICategory } from "../../../../models/Category/Category.model";
 import Map from "../../../../helpers/mapItems.helper";
 import { AxiosError, AxiosResponse } from "axios";
@@ -14,7 +13,7 @@ const buildTree = (nodes: APICategory, parent: number | null): APICategory => {
 		});
 };
 
-export const getCategoryTree: Handler = async (req, res, next) => {
+export const getCategoryTree: Handler = (req, res) => {
 	selfAccess
 		.get(`categories/`)
 		.then((response: AxiosResponse<APICategory>) => {

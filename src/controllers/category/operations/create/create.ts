@@ -22,7 +22,7 @@ const schema: JSONSchemaType<APICategory> = {
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
 
-export const createCategory: Handler = async (req, res, next) => {
+export const createCategory: Handler = (req, res) => {
 	if (validate(req.body)) {
 		inventree
 			.post(`api/part/category/`, req.body)

@@ -3,7 +3,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { APICategory } from "../../../../models/Category/Category.model";
 import { inventree } from "../../../../server";
 
-export const getCategory: Handler = (req, res, next) => {
+export const getCategory: Handler = (req, res) => {
 	inventree
 		.get(`api/part/category/${req.params.id}/`)
 		.then((response: AxiosResponse<APICategory>) => {

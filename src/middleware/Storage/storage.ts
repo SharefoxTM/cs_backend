@@ -1,8 +1,9 @@
 import net from "net";
 import { StorageResult } from "../../models/Storage/StorageResult.model";
 import S from "../../controllers/storage/resources";
+import { AxiosError } from "axios";
 
-const storeReel = async (ip: string, width: string): Promise<StorageResult> => {
+const storeReel = (ip: string, width: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
 		socket.connect(5050, ip, function () {
@@ -24,7 +25,7 @@ const storeReel = async (ip: string, width: string): Promise<StorageResult> => {
 	});
 };
 
-const retrieveReel = async (location_path: string): Promise<StorageResult> => {
+const retrieveReel = (location_path: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const [ip, row, slot, width] = location_path.split("/");
 		const socket = new net.Socket();
@@ -53,7 +54,7 @@ const retrieveReel = async (location_path: string): Promise<StorageResult> => {
 	});
 };
 
-const updateMode = async (ip: string, mode: string): Promise<StorageResult> => {
+const updateMode = (ip: string, mode: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
 		socket.connect(5050, ip, function () {
@@ -73,13 +74,25 @@ const updateMode = async (ip: string, mode: string): Promise<StorageResult> => {
 	});
 };
 
-const initialiseStorage = async (storagePk: string) => {
-	const shelvePKs: string[] = await S.getShelvePKs(storagePk);
-	const slotPKs: string[] = (await S.getSlotPKs(shelvePKs)).flat(1);
-	const paths: string[] = (await S.getWidthPathstrings(slotPKs)).flat(1);
-	paths.map((path: string) => {
-		const [ip, shelve, slot, width] = path.split("/");
-		storeReel(ip, width);
+const initialiseStorage = (storagePk: string): Promise<StorageResult> => {
+	return new Promise<StorageResult>((resolve, reject) => {
+		S.getShelvePKs(storagePk)
+			.then((shelvePKs: string[]) => {
+				S.getSlotPKs(shelvePKs)
+					.then((slotPKs: string[]) => {
+						S.getWidthPathstrings(slotPKs.flat(1))
+							.then((paths: string[]) => {
+								paths.flat(1).map((path: string) => {
+									const [ip, shelve, slot, width] = path.split("/");
+									storeReel(ip, width);
+								});
+								resolve({ status: 200, data: "init success" });
+							})
+							.catch((e: AxiosError) => reject(e));
+					})
+					.catch((e: AxiosError) => reject(e));
+			})
+			.catch((e: AxiosError) => reject(e));
 	});
 };
 

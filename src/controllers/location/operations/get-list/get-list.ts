@@ -4,10 +4,10 @@ import { AxiosError, AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
 
-export const getStorageIPs: Handler = (req, res, next) => {
+export const getStorageIPs: Handler = (req, res) => {
 	inventree
 		.get(`api/stock/location/?parent=null`)
-		.then(async (response: AxiosResponse<APILocation[]>) => {
+		.then((response: AxiosResponse<APILocation[]>) => {
 			res.json(Map.mapIPs(response.data));
 		})
 		.catch((err: AxiosError) =>

@@ -1,7 +1,8 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { StorageResult } from "../../models/Storage/StorageResult.model";
 import { APILocationDetail } from "../../models/Location/APILocationDetail.model";
 import { APILocation } from "../../models/Location/APILocation.model";
+import { inventree, selfAccess } from "../../server";
 
 type FindOrCreateLocationProps = {
 	ip: string;
@@ -12,17 +13,12 @@ type FindOrCreateLocationProps = {
 
 const findOrCreateLocation = (
 	locationBody: FindOrCreateLocationProps,
-	response: StorageResult,
-): Promise<number | void> => {
-	return new Promise<number | void>((resolve, reject) =>
-		axios
-			.post(`${process.env.BE_SELF}location/`, locationBody)
+): Promise<number> => {
+	return new Promise<number>((resolve, reject) =>
+		selfAccess
+			.post(`location/`, locationBody)
 			.then((resp: AxiosResponse<APILocationDetail>) => resolve(resp.data.pk))
-			.catch((e: Error) => {
-				response.status = 400;
-				response.data = e.message;
-				reject(e);
-			}),
+			.catch((e: AxiosError) => reject(e)),
 	);
 };
 
@@ -78,69 +74,53 @@ const checkData = (data: any, type: "store" | "retrieve" | "mode") => {
 	return result;
 };
 
-const getShelvePKs = async (storagePK: string): Promise<string[]> => {
-	return axios
-		.get(`${process.env.DB_HOST}/api/stock/location/?parent=${storagePK}`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		})
-		.then((response: AxiosResponse<APILocation[]>) => response.data)
-		.then((locations: APILocation[]) =>
-			locations.map((location) => location.pk.toString() as string),
-		);
+const getShelvePKs = (storagePK: string): Promise<string[]> => {
+	return new Promise<string[]>((resolve, reject) => {
+		inventree
+			.get(`api/stock/location/?parent=${storagePK}`)
+			.then((response: AxiosResponse<APILocation[]>) =>
+				resolve(response.data.map((location) => location.pk.toString())),
+			)
+			.catch((e: AxiosError) => reject(e));
+	});
 };
 
 const getSlotPKs = async (storagePK: string[]): Promise<string[]> => {
 	const requests = storagePK.map((pk) =>
-		axios.get(`${process.env.DB_HOST}/api/stock/location/?parent=${pk}`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		}),
+		inventree.get(`api/stock/location/?parent=${pk}`),
 	);
-	return (
-		(await axios
-			.all(requests)
-			.then((responses: any) =>
-				responses.map(
-					(responseLocations: AxiosResponse<APILocation[]>) =>
-						responseLocations.data,
-				),
-			)
-			// .then((response: any) => response)
-			.then((data: APILocation[][]) =>
-				data.map((locations: APILocation[]) =>
-					locations.map((location) => location.pk),
-				),
-			)) as string[]
-	);
+	return (await axios
+		.all(requests)
+		.then((responses: AxiosResponse<APILocation[]>[]) =>
+			responses.map(
+				(responseLocations: AxiosResponse<APILocation[]>) =>
+					responseLocations.data,
+			),
+		)
+		.then((data: APILocation[][]) =>
+			data.map((locations: APILocation[]) =>
+				locations.map((location) => location.pk),
+			),
+		)) as string[];
 };
 
 const getWidthPathstrings = async (SlotPKs: string[]): Promise<string[]> => {
 	const requests = SlotPKs.map((pk) =>
-		axios.get(`${process.env.DB_HOST}/api/stock/location/?parent=${pk}`, {
-			headers: {
-				Authorization: process.env.DB_TOKEN,
-			},
-		}),
+		inventree.get(`api/stock/location/?parent=${pk}`),
 	);
-	return (
-		(await axios
-			.all(requests)
-			.then((responses: any) =>
-				responses.map(
-					(responseLocations: AxiosResponse<APILocation[]>) =>
-						responseLocations.data,
-				),
-			)
-			// .then((response: any) => response)
-			.then((data: APILocation[][]) =>
-				data.map((locations: APILocation[]) =>
-					locations.map((location) => location.pathstring),
-				),
-			)) as string[]
-	);
+	return (await axios
+		.all(requests)
+		.then((responses: AxiosResponse<APILocation[]>[]) =>
+			responses.map(
+				(responseLocations: AxiosResponse<APILocation[]>) =>
+					responseLocations.data,
+			),
+		)
+		.then((data: APILocation[][]) =>
+			data.map((locations: APILocation[]) =>
+				locations.map((location) => location.pathstring),
+			),
+		)) as string[];
 };
 
 export default {

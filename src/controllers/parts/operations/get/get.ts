@@ -4,7 +4,7 @@ import { APIPart } from "../../../../models/Part/APIPart.model";
 import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
 
-export const getPart: Handler = (req, res, next) => {
+export const getPart: Handler = (req, res) => {
 	if (!req.params.id) {
 		throw new Error("Invalid id");
 	}

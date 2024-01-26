@@ -26,7 +26,7 @@ const schema: JSONSchemaType<NewSupplierPart> = {
 const ajv = new Ajv();
 const validate = ajv.compile(schema);
 
-export const createSupplierPart: Handler = async (req, res, next) => {
+export const createSupplierPart: Handler = (req, res) => {
 	if (validate(req.body)) {
 		inventree
 			.post(`api/company/part/`, req.body)

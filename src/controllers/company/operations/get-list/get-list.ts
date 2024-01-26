@@ -5,7 +5,7 @@ import { APISupplier } from "../../../../models/Company/APISupplier.model";
 import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
 
-export const getSupplierPartList: Handler = (req, res, next) => {
+export const getSupplierPartList: Handler = (req, res) => {
 	inventree
 		.get(`api/company/part/`, {
 			params: req.query,
@@ -18,7 +18,7 @@ export const getSupplierPartList: Handler = (req, res, next) => {
 		);
 };
 
-export const getSupplierList: Handler = (req, res, next) => {
+export const getSupplierList: Handler = (req, res) => {
 	inventree
 		.get(`api/company/`, {
 			params: { ...req.query, is_supplier: true },

@@ -65,7 +65,7 @@ const ajv = new Ajv();
 addFormats(ajv);
 const validate = ajv.compile(schema);
 
-export const createPart: Handler = async (req, res, next) => {
+export const createPart: Handler = (req, res) => {
 	if (validate(req.body)) {
 		inventree
 			.post(`api/part/`, req.body)

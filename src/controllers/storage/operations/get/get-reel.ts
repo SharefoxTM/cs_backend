@@ -32,10 +32,10 @@ const getLowestAvailable = (
 	}
 };
 
-export const getReel: Handler = (req, res, next) => {
+export const getReel: Handler = (req, res) => {
 	inventree
 		.get(
-			`/api/stock/?location_detail=true&part=${req.params.ID}&supplier_part_detail=true&ordering=quantity`,
+			`api/stock/?location_detail=true&part=${req.params.ID}&supplier_part_detail=true&ordering=quantity`,
 		)
 		.then((response: AxiosResponse<APIStockLocation[]>) => {
 			const resp: MovingStock | undefined = getLowestAvailable(response.data);
