@@ -13,6 +13,6 @@ export const getReelList: Handler = (req, res) => {
 			res.json(Map.mapMovingStock(response.data)),
 		)
 		.catch((err: AxiosError) =>
-			res.status(err.response?.status || 400).json(err.response),
+			res.status(err.response?.status || 400).json(err.response?.data),
 		);
 };

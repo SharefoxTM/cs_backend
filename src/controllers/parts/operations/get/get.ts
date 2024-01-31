@@ -14,6 +14,6 @@ export const getPart: Handler = (req, res) => {
 			res.json(Map.mapPart(response.data));
 		})
 		.catch((err: AxiosError) =>
-			res.status(err.response?.status || 400).json(err.response),
+			res.status(err.response?.status || 400).json(err.response?.data),
 		);
 };

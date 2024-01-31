@@ -14,6 +14,6 @@ export const getFile: Handler = (req, res) => {
 		})
 		.then((response: AxiosResponse) => response.data.pipe(res))
 		.catch((err: AxiosError) =>
-			res.status(err.response?.status || 400).json(err.response),
+			res.status(err.response?.status || 400).json(err.response?.data),
 		);
 };

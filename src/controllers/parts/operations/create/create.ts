@@ -4,6 +4,7 @@ import { NewPart } from "../../../../models/Part/NewPart.model";
 import Ajv, { JSONSchemaType } from "ajv";
 import addFormats from "ajv-formats";
 import { inventree } from "../../../../server";
+import { APIPart } from "../../../../models/Part/APIPart.model";
 
 const schema: JSONSchemaType<NewPart> = {
 	type: "object",
@@ -69,7 +70,7 @@ export const createPart: Handler = (req, res) => {
 	if (validate(req.body)) {
 		inventree
 			.post(`api/part/`, req.body)
-			.then((response: AxiosResponse) => {
+			.then((response: AxiosResponse<APIPart>) => {
 				res.json(response.data);
 			})
 			.catch((err: AxiosError) =>

@@ -14,7 +14,7 @@ export const getSupplierPartList: Handler = (req, res) => {
 			res.json(response.data);
 		})
 		.catch((err: AxiosError) =>
-			res.status(err.response?.status || 400).json(err.response),
+			res.status(err.response?.status || 400).json(err.response?.data),
 		);
 };
 
@@ -27,6 +27,6 @@ export const getSupplierList: Handler = (req, res) => {
 			res.json(Map.mapSuppliers(response.data));
 		})
 		.catch((err: AxiosError) =>
-			res.status(err.response?.status || 400).json(err.response),
+			res.status(err.response?.status || 400).json(err.response?.data),
 		);
 };

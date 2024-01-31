@@ -20,6 +20,6 @@ export const getCategoryTree: Handler = (req, res) => {
 			res.json(Map.mapTree(buildTree(response.data, null)));
 		})
 		.catch((err: AxiosError) =>
-			res.status(err.response?.status || 400).json(err.response),
+			res.status(err.response?.status || 400).json(err.response?.data),
 		);
 };
