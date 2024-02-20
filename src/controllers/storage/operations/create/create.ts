@@ -6,41 +6,46 @@ import { inventree } from "../../../../server";
 import { AxiosError, AxiosResponse } from "axios";
 
 export const createReel: Handler = (req, res) => {
-	const width = req.body.newReelSelectWidth.value;
-	const qty = req.body.newReelQty;
-	const sp = req.body.newReelSelectSP.value;
-	const ip = req.body.newReelSelectIP.label;
+	const width = req.body.reelSelectWidth;
+	const qty = req.body.reelQty;
+	const sp = req.body.supplier_part;
+	const ip = req.body.ip;
+
 	storage
 		.storeReel(ip, width)
 		.then((response: StorageResult) => {
-			const { row, slot } = JSON.parse(response.data);
-			const locationBody = {
-				ip: ip,
-				row: row,
-				slot: slot,
-				width: width,
-			};
-			S.findOrCreateLocation(locationBody)
-				.then((location: number) => {
-					const body = {
-						location: location,
-						part: req.body.part.value,
-						quantity: qty,
-						supplier_part: sp,
-					};
+			if (response.status) {
+				res.status(response.status || 400).json(response);
+			} else {
+				const { row, slot } = JSON.parse(response.data);
+				const locationBody = {
+					ip: ip,
+					row: row,
+					slot: slot,
+					width: width,
+				};
+				S.findOrCreateLocation(locationBody)
+					.then((location: number) => {
+						const body = {
+							location: location,
+							part: req.body.part.value,
+							quantity: qty,
+							supplier_part: sp,
+						};
 
-					inventree
-						.post(`api/stock/`, body)
-						.then((resp: AxiosResponse) =>
-							res.status(response.status).json({ message: resp.data }),
-						)
-						.catch((err: AxiosError) =>
-							res.status(err.response?.status || 400).json(err.response),
-						);
-				})
-				.catch((err: AxiosError) =>
-					res.status(err.response?.status || 400).json(err.response?.data),
-				);
+						inventree
+							.post(`api/stock/`, body)
+							.then((resp: AxiosResponse) =>
+								res.status(response.status).json({ message: resp.data }),
+							)
+							.catch((err: AxiosError) =>
+								res.status(err.response?.status || 400).json(err.response),
+							);
+					})
+					.catch((err: AxiosError) =>
+						res.status(err.response?.status || 400).json(err.response?.data),
+					);
+			}
 		})
 		.catch((err: Error) => {
 			res.status(400).json({ message: err.message });

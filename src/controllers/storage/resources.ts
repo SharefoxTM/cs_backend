@@ -22,15 +22,18 @@ const findOrCreateLocation = (
 	);
 };
 
-const checkData = (data: any, type: "store" | "retrieve" | "mode") => {
+const checkData = (
+	data: any,
+	type: "store" | "retrieve" | "mode" | "status",
+) => {
 	let result: StorageResult = { data: "", status: 0 };
 	if (data !== undefined) {
+		const parsedResult = JSON.parse(data.toString());
 		if (type === "store") {
-			const parsedResult = JSON.parse(data.toString());
-			if (parsedResult.type === "error") {
+			if (parsedResult.status != 200) {
 				result = {
-					status: 400,
-					data: parsedResult.error,
+					status: parsedResult.status,
+					data: parsedResult.data,
 				};
 			} else {
 				if (parsedResult.out_come === "geen plaats") {
@@ -59,11 +62,23 @@ const checkData = (data: any, type: "store" | "retrieve" | "mode") => {
 					status: 400,
 					data: "Error: already taken out!",
 				};
-		} else {
+		} else if (type === "mode") {
 			result = {
-				status: 200,
-				data: "Success",
+				status: parsedResult.status,
+				data: parsedResult.data,
 			};
+		} else if (type === "status") {
+			result = {
+				status: parsedResult.status,
+				data: parsedResult.data,
+			};
+		} else {
+			if (parsedResult.status != 200) {
+				result = {
+					status: parsedResult.status,
+					data: parsedResult.data,
+				};
+			}
 		}
 	} else {
 		result = {

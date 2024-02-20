@@ -1,3 +1,5 @@
+import { APIPartstatus } from "../Utils/Utils.model";
+
 export type MovingStock = {
 	batch: String;
 	delete_on_deplete: boolean;
@@ -5,7 +7,7 @@ export type MovingStock = {
 	pk: number;
 	quantity: number;
 	serial: string;
-	status: 10 | 50 | 55 | 60 | 65 | 70 | 75 | 85;
+	status: APIPartstatus;
 	status_text: string;
 	supplier_part_SKU: string;
 	barcode_hash: string;

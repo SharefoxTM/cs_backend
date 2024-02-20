@@ -7,9 +7,7 @@ const storeReel = (ip: string, width: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
 		socket.connect(5050, ip, function () {
-			socket.write(
-				JSON.stringify({ type: "store", ID: "3", width: `${width}` }),
-			);
+			socket.write(JSON.stringify({ mode: "put", data: { width: width } }));
 		});
 
 		socket.on("data", (data) => {
@@ -58,11 +56,32 @@ const updateMode = (ip: string, mode: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
 		socket.connect(5050, ip, function () {
-			socket.write(JSON.stringify({ type: "vegas", mode: mode }));
+			socket.write(JSON.stringify({ mode: "led", data: mode }));
 		});
 
 		socket.on("data", function (data) {
 			const result = S.checkData(data, "mode");
+			socket.destroy();
+			resolve(result);
+		});
+
+		socket.on("error", (error) => {
+			socket.destroy();
+			reject(error);
+		});
+	});
+};
+
+const getStatus = (ip: string, row: string): Promise<StorageResult> => {
+	return new Promise<StorageResult>((resolve, reject) => {
+		const socket = new net.Socket();
+		console.log({ ip, row });
+		socket.connect(5050, ip, function () {
+			socket.write(JSON.stringify({ mode: "status", data: { row: `${row}` } }));
+		});
+
+		socket.on("data", (data) => {
+			const result = S.checkData(data, "status");
 			socket.destroy();
 			resolve(result);
 		});
@@ -100,5 +119,6 @@ export default {
 	storeReel,
 	retrieveReel,
 	updateMode,
+	getStatus,
 	initialiseStorage,
 };

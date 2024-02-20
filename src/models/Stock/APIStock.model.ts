@@ -1,8 +1,6 @@
-import { APILocationDetail } from "../Location/APILocationDetail.model";
-import { APISupplierPartDetail } from "../Company/APISupplierPartDetail.model";
 import { APICurrency, APIPartstatus } from "../Utils/Utils.model";
 
-export type APIPartStock = {
+export type APIStock = {
 	batch: string;
 	belongs_to: number;
 	build: number;
@@ -13,7 +11,6 @@ export type APIPartStock = {
 	is_building: boolean;
 	link: string;
 	location: number;
-	location_detail: APILocationDetail;
 	notes: string;
 	owner: number;
 	packaging: string;
@@ -29,7 +26,6 @@ export type APIPartStock = {
 	status_text: string;
 	stocktake_date: string;
 	supplier_part: number;
-	supplier_part_detail: APISupplierPartDetail | null;
 	barcode_hash: string;
 	updated: string;
 	purchase_price: string;

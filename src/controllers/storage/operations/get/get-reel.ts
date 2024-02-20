@@ -3,8 +3,9 @@ import { Handler } from "express";
 import { APIStockLocation } from "../../../../models/Stock/APIStockLocation.model";
 import { MovingStock } from "../../../../models/Stock/MovingStock.model";
 import storage from "../../../../middleware/Storage/storage";
-import { inventree } from "../../../../server";
+import { inventree, selfAccess } from "../../../../server";
 import validator from "../../../../helpers/validateItems.helper";
+import { StorageResult } from "../../../../models/Storage/StorageResult.model";
 
 const getLowestAvailable = (
 	apiloc: APIStockLocation[],
@@ -37,19 +38,41 @@ const getLowestAvailable = (
 };
 
 export const getReel: Handler = (req, res) => {
+	const [partID, location] = req.params.ID_Location.split("_");
+	console.log(partID, location);
 	inventree
 		.get(
-			`api/stock/?location_detail=true&part=${req.params.ID}&supplier_part_detail=true&ordering=quantity`,
+			`api/stock/?location_detail=true&part=${partID}&supplier_part_detail=true&ordering=quantity`,
 		)
 		.then((response: AxiosResponse<APIStockLocation[]>) => {
-			console.log(response.data);
-			const resp: MovingStock | undefined = getLowestAvailable(response.data);
+			const stock: MovingStock | undefined = getLowestAvailable(response.data);
 
-			if (resp !== undefined) {
-				storage.retrieveReel(resp.location_detail_pathstring);
+			if (stock !== undefined) {
+				storage
+					.retrieveReel(stock.location_detail_pathstring)
+					.then((resp: StorageResult) => {
+						console.log(resp);
+						if (
+							resp.status === 200 ||
+							resp.data === "Error: already taken out!"
+						) {
+							selfAccess
+								.put(`company/part/${stock.pk}/${location}`)
+								.then((resp: AxiosResponse) => {
+									console.log(resp);
+									res.json(resp);
+								})
+								.catch((err: AxiosError) =>
+									res
+										.status(err.response?.status || 400)
+										.json(err.response?.data),
+								);
+						}
+					});
 				//TODO: update stock location to moving
+			} else {
+				res.status(403).json("No available reel found");
 			}
-			res.json(resp);
 		})
 		.catch((err: AxiosError) =>
 			res.status(err.response?.status || 400).json(err.response?.data),

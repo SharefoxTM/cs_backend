@@ -4,9 +4,11 @@ import {
 	getSupplierList,
 	getSupplierPartList,
 } from "./operations/get-list/get-list";
+import { setMoving } from "./operations/update/update";
 
 export default {
 	getSupplierPartList,
 	getSupplierList,
 	createSupplierPart,
+	setMoving,
 };
