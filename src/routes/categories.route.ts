@@ -9,6 +9,6 @@ CategoryRouter.route("/")
 
 CategoryRouter.route("/tree/").get(CategoryController.getCategoryTree);
 
-CategoryRouter.route("/:id").get(CategoryController.getCategory);
+CategoryRouter.route("/:id/").get(CategoryController.getCategory)
 // .put(CategoryController.updateCategory)
-// .delete(CategoryController.deleteCategory);
+.delete(CategoryController.deleteCategory);
