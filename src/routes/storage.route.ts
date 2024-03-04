@@ -10,3 +10,6 @@ StorageRouter.route("/status/").post(StorageController.getStatus);
 
 StorageRouter.route("/moving/:ID").get(StorageController.getReelList);
 StorageRouter.route("/:ID_Location").get(StorageController.getReel);
+StorageRouter.route("/:ip/:row/:slot/:width").get(
+	StorageController.getReelByLocation,
+);

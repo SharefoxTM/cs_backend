@@ -78,3 +78,19 @@ export const getReel: Handler = (req, res) => {
 			res.status(err.response?.status || 400).json(err.response?.data),
 		);
 };
+
+export const getReelByLocation: Handler = (req, res) => {
+	const ip = req.params.ip,
+		row = req.params.row,
+		slot = req.params.slot,
+		width = req.params.width;
+	const location = `${ip}/${row}/${slot}/${width}`;
+	storage
+		.retrieveReel(location)
+		.then((response: StorageResult) =>
+			res.status(response.status).json(response),
+		)
+		.catch((err) =>
+			res.status(err.response?.status || 400).json(err.response?.data),
+		);
+};

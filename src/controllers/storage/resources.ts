@@ -22,67 +22,17 @@ const findOrCreateLocation = (
 	);
 };
 
-const checkData = (
-	data: any,
-	type: "store" | "retrieve" | "mode" | "status",
-) => {
+const checkData = (data: any) => {
 	let result: StorageResult = { data: "", status: 0 };
 	if (data !== undefined) {
 		const parsedResult = JSON.parse(data.toString());
-		if (type === "store") {
-			if (parsedResult.status != 200) {
-				result = {
-					status: parsedResult.status,
-					data: parsedResult.data,
-				};
-			} else {
-				if (parsedResult.out_come === "geen plaats") {
-					result = {
-						status: 400,
-						data: "No slots available!",
-					};
-				} else {
-					result = {
-						status: 200,
-						data: JSON.stringify({
-							row: parsedResult.slots[0].rij,
-							slot: parsedResult.slots[0].slot,
-						}),
-					};
-				}
-			}
-		} else if (type === "retrieve") {
-			if (data.out_come === "uitgenomen")
-				result = {
-					status: 200,
-					data: "Success",
-				};
-			else
-				result = {
-					status: 400,
-					data: "Error: already taken out!",
-				};
-		} else if (type === "mode") {
-			result = {
-				status: parsedResult.status,
-				data: parsedResult.data,
-			};
-		} else if (type === "status") {
-			result = {
-				status: parsedResult.status,
-				data: parsedResult.data,
-			};
-		} else {
-			if (parsedResult.status != 200) {
-				result = {
-					status: parsedResult.status,
-					data: parsedResult.data,
-				};
-			}
-		}
+		result = {
+			data: parsedResult.data,
+			status: parsedResult.status,
+		};
 	} else {
 		result = {
-			status: 404,
+			status: 500,
 			data: "Connection error!",
 		};
 	}

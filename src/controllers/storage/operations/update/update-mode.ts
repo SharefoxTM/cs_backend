@@ -1,6 +1,5 @@
 import { Handler } from "express";
 import storage from "../../../../middleware/Storage/storage";
-import { AxiosResponse } from "axios";
 import { StorageResult } from "../../../../models/Storage/StorageResult.model";
 
 export const updateMode: Handler = (req, res) => {
@@ -9,7 +8,7 @@ export const updateMode: Handler = (req, res) => {
 		storage
 			.updateMode(req.body.ip, req.body.mode)
 			.then((resp: StorageResult) => {
-				res.status(resp.status).json(resp.data);
+				res.status(resp.status).json(resp);
 			})
 			.catch((error) => {
 				res.status(400).json(error);

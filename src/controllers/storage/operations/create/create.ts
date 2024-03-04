@@ -14,38 +14,34 @@ export const createReel: Handler = (req, res) => {
 	storage
 		.storeReel(ip, width)
 		.then((response: StorageResult) => {
-			if (response.status) {
-				res.status(response.status || 400).json(response);
-			} else {
-				const { row, slot } = JSON.parse(response.data);
-				const locationBody = {
-					ip: ip,
-					row: row,
-					slot: slot,
-					width: width,
-				};
-				S.findOrCreateLocation(locationBody)
-					.then((location: number) => {
-						const body = {
-							location: location,
-							part: req.body.part.value,
-							quantity: qty,
-							supplier_part: sp,
-						};
+			const { row, slot } = JSON.parse(response.data);
+			const locationBody = {
+				ip: ip,
+				row: row,
+				slot: slot,
+				width: width,
+			};
+			S.findOrCreateLocation(locationBody)
+				.then((location: number) => {
+					const body = {
+						location: location,
+						part: req.body.part.value,
+						quantity: qty,
+						supplier_part: sp,
+					};
 
-						inventree
-							.post(`api/stock/`, body)
-							.then((resp: AxiosResponse) =>
-								res.status(response.status).json({ message: resp.data }),
-							)
-							.catch((err: AxiosError) =>
-								res.status(err.response?.status || 400).json(err.response),
-							);
-					})
-					.catch((err: AxiosError) =>
-						res.status(err.response?.status || 400).json(err.response?.data),
-					);
-			}
+					inventree
+						.post(`api/stock/`, body)
+						.then((resp: AxiosResponse) =>
+							res.status(response.status).json({ message: resp.data }),
+						)
+						.catch((err: AxiosError) =>
+							res.status(err.response?.status || 400).json(err.response),
+						);
+				})
+				.catch((err: AxiosError) =>
+					res.status(err.response?.status || 400).json(err.response?.data),
+				);
 		})
 		.catch((err: Error) => {
 			res.status(400).json({ message: err.message });

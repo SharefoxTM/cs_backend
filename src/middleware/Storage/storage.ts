@@ -3,6 +3,38 @@ import { StorageResult } from "../../models/Storage/StorageResult.model";
 import S from "../../controllers/storage/resources";
 import { AxiosError } from "axios";
 
+const initReels = (reels: string[]) => {
+	let data = new Array<Object>();
+	const [ip, shelve, slot, width] = reels[0].split("/");
+	reels.map((path, index) => {
+		let [ip, shelve, slot, width] = path.split("/");
+
+		data[index] = {
+			width: width,
+			row: shelve,
+			slot: slot,
+		};
+	});
+
+	return new Promise<StorageResult>((resolve, reject) => {
+		const socket = new net.Socket();
+		socket.connect(5050, ip, function () {
+			socket.write(JSON.stringify({ mode: "put", data: data }));
+		});
+
+		socket.on("data", (data) => {
+			const result = S.checkData(data);
+			socket.destroy();
+			resolve(result);
+		});
+
+		socket.on("error", (error) => {
+			socket.destroy();
+			reject(error);
+		});
+	});
+};
+
 const storeReel = (ip: string, width: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
@@ -11,7 +43,7 @@ const storeReel = (ip: string, width: string): Promise<StorageResult> => {
 		});
 
 		socket.on("data", (data) => {
-			const result = S.checkData(data, "store");
+			const result = S.checkData(data);
 			socket.destroy();
 			resolve(result);
 		});
@@ -30,17 +62,18 @@ const retrieveReel = (location_path: string): Promise<StorageResult> => {
 		socket.connect(5050, ip, function () {
 			socket.write(
 				JSON.stringify({
-					type: "retrieve",
-					ID: "1",
-					rij: row,
-					slot: slot,
-					width: width,
+					mode: "take",
+					data: {
+						row: parseInt(row),
+						slot: parseInt(slot),
+						width: parseInt(width),
+					},
 				}),
 			);
 		});
 
 		socket.on("data", (data) => {
-			const result = S.checkData(data, "retrieve");
+			const result = S.checkData(data);
 			socket.destroy();
 			resolve(result);
 		});
@@ -60,7 +93,7 @@ const updateMode = (ip: string, mode: string): Promise<StorageResult> => {
 		});
 
 		socket.on("data", function (data) {
-			const result = S.checkData(data, "mode");
+			const result = S.checkData(data);
 			socket.destroy();
 			resolve(result);
 		});
@@ -77,11 +110,11 @@ const getStatus = (ip: string, row: string): Promise<StorageResult> => {
 		const socket = new net.Socket();
 		console.log({ ip, row });
 		socket.connect(5050, ip, function () {
-			socket.write(JSON.stringify({ mode: "status", data: { row: `${row}` } }));
+			socket.write(JSON.stringify({ mode: "status", data: { row: row } }));
 		});
 
 		socket.on("data", (data) => {
-			const result = S.checkData(data, "status");
+			const result = S.checkData(data);
 			socket.destroy();
 			resolve(result);
 		});
@@ -101,10 +134,8 @@ const initialiseStorage = (storagePk: string): Promise<StorageResult> => {
 					.then((slotPKs: string[]) => {
 						S.getWidthPathstrings(slotPKs.flat(1))
 							.then((paths: string[]) => {
-								paths.flat(1).map((path: string) => {
-									const [ip, shelve, slot, width] = path.split("/");
-									storeReel(ip, width);
-								});
+								paths = paths.flat(1);
+								initReels(paths);
 								resolve({ status: 200, data: "init success" });
 							})
 							.catch((e: AxiosError) => reject(e));
