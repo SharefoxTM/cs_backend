@@ -17,3 +17,19 @@ export const getFile: Handler = (req, res) => {
 			res.status(err.response?.status || 400).json(err.response?.data),
 		);
 };
+
+export const getLabel: Handler = (req, res) => {
+	if (!req.params.id) {
+		return res.status(400).json({ error: "No ID found!" });
+	}
+
+	res.type("application/pdf");
+	inventree
+		.get(`media/label/output/${req.params.id}`, {
+			responseType: "stream",
+		})
+		.then((response: AxiosResponse) => response.data.pipe(res))
+		.catch((err: AxiosError) =>
+			res.status(err.response?.status || 400).json(err.response?.data),
+		);
+};

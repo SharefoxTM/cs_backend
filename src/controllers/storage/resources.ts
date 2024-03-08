@@ -3,6 +3,9 @@ import { StorageResult } from "../../models/Storage/StorageResult.model";
 import { APILocationDetail } from "../../models/Location/APILocationDetail.model";
 import { APILocation } from "../../models/Location/APILocation.model";
 import { inventree, selfAccess } from "../../server";
+import { print } from "pdf-to-printer";
+import Fs from "fs";
+import Path from "path";
 
 type FindOrCreateLocationProps = {
 	ip: string;
@@ -88,10 +91,37 @@ const getWidthPathstrings = async (SlotPKs: string[]): Promise<string[]> => {
 		)) as string[];
 };
 
+const createLabel = (pk: number) => {
+	let options = { printer: "ZDesigner GK420t", orientation: "landscape" };
+	const path = Path.resolve(
+		__dirname,
+		"../../tmp/images",
+		`${Math.random().toString(36).substr(7)}.pdf`,
+	);
+	const writer = Fs.createWriteStream(path);
+
+	inventree
+		.get(`api/label/stock/2/print/?item=${pk}&plugin=inventreelabel`, {})
+		.then((resp) => {
+			selfAccess
+				.get(`file${resp.data.file}`, { responseType: "stream" })
+				.then((resp) => resp.data.pipe(writer))
+				.catch(console.log);
+		})
+		.catch(console.log);
+
+	writer.on("finish", () => {
+		print(path, options)
+			.then(() => Fs.unlinkSync(path))
+			.catch(console.log);
+	});
+};
+
 export default {
 	findOrCreateLocation,
 	checkData,
 	getShelvePKs,
 	getSlotPKs,
 	getWidthPathstrings,
+	createLabel,
 };

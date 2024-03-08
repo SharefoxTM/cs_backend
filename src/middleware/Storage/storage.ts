@@ -35,15 +35,31 @@ const initReels = (reels: string[]) => {
 	});
 };
 
-const storeReel = (ip: string, width: string): Promise<StorageResult> => {
-	return new Promise<StorageResult>((resolve, reject) => {
+const storeReel = (ip: string, width: number): Promise<any> => {
+	return new Promise<any>((resolve, reject) => {
 		const socket = new net.Socket();
 		socket.connect(5050, ip, function () {
 			socket.write(JSON.stringify({ mode: "put", data: { width: width } }));
 		});
 
 		socket.on("data", (data) => {
-			const result = S.checkData(data);
+			let result = { data: {}, status: 0 };
+			if (data !== undefined) {
+				const parsedResult = JSON.parse(data.toString());
+				result = {
+					data: {
+						message: parsedResult.data.message,
+						row: parsedResult.data.row,
+						slot: parsedResult.data.slot,
+					},
+					status: parsedResult.status,
+				};
+			} else {
+				result = {
+					status: 500,
+					data: "Connection error!",
+				};
+			}
 			socket.destroy();
 			resolve(result);
 		});

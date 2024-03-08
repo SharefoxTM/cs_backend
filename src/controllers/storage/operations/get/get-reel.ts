@@ -39,7 +39,6 @@ const getLowestAvailable = (
 
 export const getReel: Handler = (req, res) => {
 	const [partID, location] = req.params.ID_Location.split("_");
-	console.log(partID, location);
 	inventree
 		.get(
 			`api/stock/?location_detail=true&part=${partID}&supplier_part_detail=true&ordering=quantity`,
@@ -51,15 +50,13 @@ export const getReel: Handler = (req, res) => {
 				storage
 					.retrieveReel(stock.location_detail_pathstring)
 					.then((resp: StorageResult) => {
-						console.log(resp);
 						if (
 							resp.status === 200 ||
 							resp.data === "Error: already taken out!"
 						) {
 							selfAccess
 								.put(`company/part/${stock.pk}/${location}`)
-								.then((resp: AxiosResponse) => {
-									console.log(resp);
+								.then(() => {
 									res.json(resp);
 								})
 								.catch((err: AxiosError) =>
@@ -69,7 +66,6 @@ export const getReel: Handler = (req, res) => {
 								);
 						}
 					});
-				//TODO: update stock location to moving
 			} else {
 				res.status(403).json("No available reel found");
 			}

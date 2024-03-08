@@ -6,35 +6,37 @@ import { inventree } from "../../../../server";
 import { AxiosError, AxiosResponse } from "axios";
 
 export const createReel: Handler = (req, res) => {
-	const width = req.body.reelSelectWidth;
-	const qty = req.body.reelQty;
-	const sp = req.body.supplier_part;
+	const width = req.body.width;
+	const qty = req.body.qty;
+	const sp = req.body.sp;
 	const ip = req.body.ip;
-
 	storage
 		.storeReel(ip, width)
-		.then((response: StorageResult) => {
-			const { row, slot } = JSON.parse(response.data);
+		.then((response) => {
+			const row = response.data.row,
+				slot = response.data;
 			const locationBody = {
 				ip: ip,
-				row: row,
-				slot: slot,
-				width: width,
+				row: row.toString(),
+				slot: slot.toString(),
+				width: width.toString(),
 			};
+			console.log(locationBody);
 			S.findOrCreateLocation(locationBody)
 				.then((location: number) => {
 					const body = {
 						location: location,
-						part: req.body.part.value,
+						part: req.body.part,
 						quantity: qty,
 						supplier_part: sp,
 					};
 
 					inventree
 						.post(`api/stock/`, body)
-						.then((resp: AxiosResponse) =>
-							res.status(response.status).json({ message: resp.data }),
-						)
+						.then((resp: AxiosResponse) => {
+							S.createLabel(resp.data.pk);
+							res.status(response.status).json({ message: resp.data });
+						})
 						.catch((err: AxiosError) =>
 							res.status(err.response?.status || 400).json(err.response),
 						);
@@ -57,4 +59,10 @@ export const initStorage: Handler = (req, res) => {
 				res.status(e.response?.status || 400).json(e.response?.data),
 			);
 	} else res.status(400).json("No pk defined!");
+};
+
+export const printLabel: Handler = (req, res) => {
+	S.createLabel(req.body.pk);
+
+	res.status(400).json({ message: "Not implemented yet" });
 };
