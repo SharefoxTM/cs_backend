@@ -84,7 +84,6 @@ const findOrCreate = (
 };
 
 export const createLocation: Handler = (req, res) => {
-	console.log(req.body);
 	if (validateLocation(req.body)) {
 		const ip = req.body.ip;
 		const row = req.body.row;
@@ -96,7 +95,7 @@ export const createLocation: Handler = (req, res) => {
 					.then((pk: number) => {
 						findOrCreate(slot, pk, true)
 							.then((pk: number) => {
-								findOrCreate(width, pk, true)
+								findOrCreate(width, pk, false)
 									.then((pk: number) => {
 										res.json({ pk: pk });
 									})
