@@ -14,7 +14,7 @@ export const createReel: Handler = (req, res) => {
 		.storeReel(ip, width)
 		.then((response) => {
 			const row = response.data.row,
-				slot = response.data;
+				slot = response.data.slot;
 			const locationBody = {
 				ip: ip,
 				row: row.toString(),

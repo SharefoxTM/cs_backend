@@ -3,8 +3,9 @@ import { Handler } from "express";
 import { NewPart } from "../../../../models/Part/NewPart.model";
 import Ajv, { JSONSchemaType } from "ajv";
 import addFormats from "ajv-formats";
-import { inventree } from "../../../../server";
+import { inventree, selfAccess } from "../../../../server";
 import { APIPart } from "../../../../models/Part/APIPart.model";
+import { NewParameter } from "../../../../models/Part/NewParameter.model";
 
 const schema: JSONSchemaType<NewPart> = {
 	type: "object",
@@ -76,6 +77,68 @@ export const createPart: Handler = (req, res) => {
 			.catch((err: AxiosError) =>
 				res.status(err.response?.status || 400).json(err.response),
 			);
+	} else {
+		res.status(400).json(validate.errors);
+	}
+};
+
+const schemaParam: JSONSchemaType<NewParameter> = {
+	type: "object",
+	properties: {
+		part: { type: "number" },
+		template: { type: "number" },
+		data: { type: "string" },
+	},
+	required: ["part", "template", "data"],
+	additionalProperties: false,
+};
+
+const validateParam = ajv.compile(schemaParam);
+
+export const createParameter: Handler = (req, res) => {
+	if (validateParam(req.body)) {
+		selfAccess
+			.get(`parts/parameter/template/${req.body.template}`)
+			.then((resp: AxiosResponse) => {
+				if (resp.data.choices !== "") {
+					const choices = resp.data.choices.split(", ");
+					if (!choices.includes(req.body.data))
+						res
+							.status(400)
+							.json({ Message: "Data not acceptable for parameter template" });
+				}
+				inventree
+					.get(
+						`api/part/parameter/?part=${req.body.part}&template=${req.body.template}&limit=1`,
+					)
+					.then((resp: AxiosResponse) => {
+						if (resp.data.count !== 0) {
+							inventree
+								.patch(`api/part/parameter/${resp.data.results[0].pk}/`, {
+									data: req.body.data,
+								})
+								.then((response: AxiosResponse) => {
+									res.json(response.data);
+								})
+								.catch((err: AxiosError) =>
+									res
+										.status(err.response?.status || 400)
+										.json(err.response?.data),
+								);
+						} else {
+							inventree
+								.post(`api/part/parameter/`, req.body)
+								.then((response: AxiosResponse) => {
+									res.json(response.data);
+								})
+								.catch((err: AxiosError) =>
+									res
+										.status(err.response?.status || 400)
+										.json(err.response?.data),
+								);
+						}
+					});
+			});
 	} else {
 		res.status(400).json(validate.errors);
 	}

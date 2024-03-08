@@ -40,3 +40,12 @@ export const getPaginatedParts: Handler = (req, res) => {
 			res.status(error.response?.status || 400).json(error.response?.data);
 		});
 };
+
+export const getParameterTemplates: Handler = (req, res) => {
+	inventree
+		.get("api/part/parameter/template/")
+		.then((resp: AxiosResponse) => res.json(resp.data))
+		.catch((error: AxiosError) => {
+			res.status(error.response?.status || 400).json(error.response?.data);
+		});
+};

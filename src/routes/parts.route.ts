@@ -7,6 +7,13 @@ PartRouter.route("/")
 	.get(PartController.getAllParts)
 	.post(PartController.createPart);
 
+PartRouter.route("/parameter").post(PartController.createParameter);
+PartRouter.route("/parameter/template").get(
+	PartController.getParameterTemplates,
+);
+PartRouter.route("/parameter/template/:id").get(
+	PartController.getParameterTemplate,
+);
 PartRouter.route("/paginated/").get(PartController.getPaginatedParts);
 
 PartRouter.route("/:id")
