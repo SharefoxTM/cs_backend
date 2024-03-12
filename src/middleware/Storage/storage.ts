@@ -5,15 +5,18 @@ import { AxiosError } from "axios";
 
 const initReels = (reels: string[]) => {
 	let data = new Array<Object>();
-	const [ip, shelve, slot, width] = reels[0].split("/");
-	reels.map((path, index) => {
-		let [ip, shelve, slot, width] = path.split("/");
+	let [ip, shelve, slot, width] = reels[0].split("/");
+	let index = 0;
+	reels.map((path) => {
+		if (path !== undefined) {
+			[ip, shelve, slot, width] = path.split("/");
 
-		data[index] = {
-			width: width,
-			row: shelve,
-			slot: slot,
-		};
+			data[index++] = {
+				width: parseInt(width),
+				row: parseInt(shelve),
+				slot: parseInt(slot),
+			};
+		}
 	});
 
 	return new Promise<StorageResult>((resolve, reject) => {
@@ -24,6 +27,7 @@ const initReels = (reels: string[]) => {
 
 		socket.on("data", (data) => {
 			const result = S.checkData(data);
+			console.log(result);
 			socket.destroy();
 			resolve(result);
 		});

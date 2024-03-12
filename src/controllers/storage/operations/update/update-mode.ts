@@ -1,6 +1,7 @@
 import { Handler } from "express";
 import storage from "../../../../middleware/Storage/storage";
 import { StorageResult } from "../../../../models/Storage/StorageResult.model";
+import { AxiosError } from "axios";
 
 export const updateMode: Handler = (req, res) => {
 	//TODO: check response
@@ -10,8 +11,8 @@ export const updateMode: Handler = (req, res) => {
 			.then((resp: StorageResult) => {
 				res.status(resp.status).json(resp);
 			})
-			.catch((error) => {
-				res.status(400).json(error);
+			.catch((error: AxiosError) => {
+				res.status(error.status || 500).json(error);
 			});
 	} else res.status(400).json("Data incorrect!");
 };

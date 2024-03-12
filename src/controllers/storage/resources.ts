@@ -86,7 +86,9 @@ const getWidthPathstrings = async (SlotPKs: string[]): Promise<string[]> => {
 		)
 		.then((data: APILocation[][]) =>
 			data.map((locations: APILocation[]) =>
-				locations.map((location) => location.pathstring),
+				locations.map((location) => {
+					if (location.items !== 0) return location.pathstring;
+				}),
 			),
 		)) as string[];
 };
