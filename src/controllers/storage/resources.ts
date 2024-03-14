@@ -3,7 +3,7 @@ import { StorageResult } from "../../models/Storage/StorageResult.model";
 import { APILocationDetail } from "../../models/Location/APILocationDetail.model";
 import { APILocation } from "../../models/Location/APILocation.model";
 import { inventree, selfAccess } from "../../server";
-import { print } from "pdf-to-printer";
+import { print } from "unix-print";
 import Fs from "fs";
 import Path from "path";
 
@@ -94,7 +94,6 @@ const getWidthPathstrings = async (SlotPKs: string[]): Promise<string[]> => {
 };
 
 const createLabel = (pk: number) => {
-	let options = { printer: "ZDesigner GK420t", orientation: "landscape" };
 	const path = Path.resolve(
 		__dirname,
 		"../../tmp/images",
@@ -113,7 +112,7 @@ const createLabel = (pk: number) => {
 		.catch(console.log);
 
 	writer.on("finish", () => {
-		print(path, options)
+		print(path)
 			.then(() => Fs.unlinkSync(path))
 			.catch(console.log);
 	});

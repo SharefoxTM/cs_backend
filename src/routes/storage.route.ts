@@ -9,7 +9,7 @@ StorageRouter.route("/")
 StorageRouter.route("/init/").post(StorageController.initStorage);
 StorageRouter.route("/mode/").post(StorageController.updateMode);
 StorageRouter.route("/status/").post(StorageController.getStatus);
-StorageRouter.route("/print/").post(StorageController.printLabel);
+StorageRouter.route("/print/").post(StorageController.printLabel).get(StorageController.getPrinterList);
 
 StorageRouter.route("/moving/:ID").get(StorageController.getReelList);
 StorageRouter.route("/:ID_Location").get(StorageController.getReel);

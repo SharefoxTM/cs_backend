@@ -6,7 +6,7 @@ import { inventree } from "../../../../server";
 
 export const getStorageIPs: Handler = (req, res) => {
 	inventree
-		.get(`api/stock/location/?parent=null`)
+		.get(`api/stock/location/`)
 		.then((response: AxiosResponse<APILocation[]>) => {
 			res.json(Map.mapIPs(response.data));
 		})

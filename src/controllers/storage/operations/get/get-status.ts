@@ -13,3 +13,4 @@ export const getStatus: Handler = (req, res) => {
 			res.status(err.response?.status || 500).json(err),
 		);
 };
+

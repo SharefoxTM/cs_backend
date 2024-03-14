@@ -28,12 +28,13 @@ export const patchReel: Handler = (req, res) => {
 						inventree
 							.patch(`api/stock/${qr}/`, body)
 							.then((resp: AxiosResponse) => {
+							S.createLabel(resp.data.pk);
 								res.status(response.status).json({ message: resp.data });
 							})
 							.catch((err: AxiosError) =>
 								res
 									.status(err.response?.status || 400)
-									.json(err.response?.data),
+									.json(err.response),
 							);
 					})
 					.catch((err: AxiosError) =>

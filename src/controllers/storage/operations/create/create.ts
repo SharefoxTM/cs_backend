@@ -4,6 +4,7 @@ import { StorageResult } from "../../../../models/Storage/StorageResult.model";
 import S from "../../resources";
 import { inventree } from "../../../../server";
 import { AxiosError, AxiosResponse } from "axios";
+import { getPrinters } from "unix-print";
 
 export const createReel: Handler = (req, res) => {
 	const width = req.body.width;
@@ -64,5 +65,5 @@ export const initStorage: Handler = (req, res) => {
 export const printLabel: Handler = (req, res) => {
 	S.createLabel(req.body.pk);
 
-	res.status(400).json({ message: "Not implemented yet" });
+	res.status(200).json({ message: "Done" });
 };

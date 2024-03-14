@@ -1,8 +1,10 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import { APIStockLocation } from "../../../../models/Stock/APIStockLocation.model";
 import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
+import { getPrinters } from "unix-print";
+
 
 export const getReelList: Handler = (req, res) => {
 	inventree
@@ -15,4 +17,9 @@ export const getReelList: Handler = (req, res) => {
 		.catch((err: AxiosError) =>
 			res.status(err.response?.status || 400).json(err.response?.data),
 		);
+};
+
+export const getPrinterList: Handler = (req, res) => {
+
+	getPrinters().then((resp: any) => res.status(200).json(resp)).catch(console.log);
 };

@@ -4,7 +4,7 @@ import {
 	initStorage,
 	printLabel,
 } from "./operations/create/create";
-import { getReelList } from "./operations/get-list/get-reelList";
+import { getPrinterList, getReelList } from "./operations/get-list/get-reelList";
 import { getReel, getReelByLocation } from "./operations/get/get-reel";
 import { getStatus } from "./operations/get/get-status";
 import { updateMode } from "./operations/update/update-mode";
@@ -20,4 +20,5 @@ export default {
 	initStorage,
 	getReelByLocation,
 	printLabel,
+	getPrinterList
 };
