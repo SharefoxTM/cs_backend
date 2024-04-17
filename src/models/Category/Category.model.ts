@@ -1,5 +1,3 @@
-import { CategoryTree } from "./CategoryTree.model";
-
 export type APICategory = {
 	pk: number;
 	name: string;
