@@ -1,6 +1,6 @@
 import { Handler } from "express";
 import { AxiosError, AxiosResponse } from "axios";
-import { APICategory } from "../../../../models/Category/Category.model";
+import { APICategory } from "../../../../models/Category/APICategory.model";
 import { inventree } from "../../../../server";
 
 export const getCategory: Handler = (req, res) => {

@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { inventree, selfAccess } from "../../../../server";
-import { APICategory } from "../../../../models/Category/Category.model";
+import { APICategory } from "../../../../models/Category/APICategory.model";
 
 const multer = require("multer");
 const XLSX = require("xlsx");

@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
-import { APICategory } from "../../../../models/Category/Category.model";
+import { APICategory } from "../../../../models/Category/APICategory.model";
 import { inventree, selfAccess } from "../../../../server";
 import Map from "../../../../helpers/mapItems.helper";
 import resource from "../../resources";

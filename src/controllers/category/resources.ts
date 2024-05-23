@@ -1,4 +1,4 @@
-import { APICategory } from "../../models/Category/Category.model";
+import { APICategory } from "../../models/Category/APICategory.model";
 
 const buildTree = (nodes: APICategory, parent: number | null): APICategory => {
 	return nodes
@@ -10,5 +10,5 @@ const buildTree = (nodes: APICategory, parent: number | null): APICategory => {
 };
 
 export default {
-    buildTree
+	buildTree,
 };

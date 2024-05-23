@@ -1,5 +1,5 @@
 import { Request } from "express";
-import { APICategory } from "../models/Category/Category.model";
+import { APICategory } from "../models/Category/APICategory.model";
 import { CategoryTree } from "../models/Category/CategoryTree.model";
 import { PartQuery } from "../models/Part/PartQuery.model";
 import { Part } from "../models/Part/Part.model";

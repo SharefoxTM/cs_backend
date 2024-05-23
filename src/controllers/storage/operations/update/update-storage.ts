@@ -28,13 +28,11 @@ export const patchReel: Handler = (req, res) => {
 						inventree
 							.patch(`api/stock/${qr}/`, body)
 							.then((resp: AxiosResponse) => {
-							S.createLabel(resp.data.pk);
+								S.createLabel(resp.data.pk);
 								res.status(response.status).json({ message: resp.data });
 							})
 							.catch((err: AxiosError) =>
-								res
-									.status(err.response?.status || 400)
-									.json(err.response),
+								res.status(err.response?.status || 400).json(err.response),
 							);
 					})
 					.catch((err: AxiosError) =>
@@ -96,6 +94,6 @@ export const initStorage: Handler = (req, res) => {
 
 export const printLabel: Handler = (req, res) => {
 	S.createLabel(req.body.pk);
-
-	res.status(400).json({ message: "Not implemented yet" });
+	//TODO: Check for error
+	res.status(200).json({ message: "Done" });
 };

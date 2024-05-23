@@ -1,10 +1,10 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import Ajv, { JSONSchemaType } from "ajv";
-import { APICategory } from "../../../../models/Category/APICategory.model";
+import { NewCategory } from "../../../../models/Category/NewCategory.model";
 import { inventree } from "../../../../server";
 
-const schema: JSONSchemaType<APICategory> = {
+const schema: JSONSchemaType<NewCategory> = {
 	type: "object",
 	properties: {
 		name: { type: "string", maxLength: 100 },
