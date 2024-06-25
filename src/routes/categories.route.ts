@@ -5,10 +5,12 @@ export const CategoryRouter = Router();
 
 CategoryRouter.route("/")
 	.get(CategoryController.getAllCategories)
-	.post(CategoryController.createCategory);
+	.post(CategoryController.createCategory)
+	.delete(CategoryController.deleteCategory);
 
 CategoryRouter.route("/tree/").get(CategoryController.getCategoryTree);
 
-CategoryRouter.route("/:id/").get(CategoryController.getCategory)
-// .put(CategoryController.updateCategory)
-.delete(CategoryController.deleteCategory);
+CategoryRouter.route("/:id/")
+	.get(CategoryController.getCategory)
+	// .put(CategoryController.updateCategory)
+	.delete(CategoryController.deleteCategory);
