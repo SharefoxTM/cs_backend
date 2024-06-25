@@ -33,6 +33,6 @@ export const createCategory: Handler = (req, res) => {
 				res.status(err.response?.status || 400).json(err),
 			);
 	} else {
-		res.status(400).json(validate.errors);
+		res.status(400).json({ error: validate.errors![0].message });
 	}
 };
