@@ -1,7 +1,11 @@
 import axios from "axios";
 import { app } from "./config/main.config";
 
-require("dotenv").config();
+const dotenv = require("dotenv");
+
+process.env.NODE_ENV = process.env.NODE_ENV || "development";
+const envFile = process.env.NODE_ENV === "production" ? ".env" : ".env.dev";
+dotenv.config({ path: envFile });
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

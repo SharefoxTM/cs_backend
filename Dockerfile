@@ -13,6 +13,9 @@ RUN npm i
 # Copy app files
 COPY . .
 
+# Set environment variable
+ENV NODE_ENV production
+
 # Expose port
 EXPOSE 8080
 
