@@ -56,9 +56,7 @@ export const initStorage: Handler = (req, res) => {
 		storage
 			.initialiseStorage(req.body.pk)
 			.then((resp: StorageResult) => res.status(resp.status).json(resp.data))
-			.catch((e: AxiosError) =>
-				res.status(e.response?.status || 400).json(e.response?.data),
-			);
+			.catch((e: StorageResult) => res.status(e.status).json(e.data));
 	} else res.status(400).json("No pk defined!");
 };
 

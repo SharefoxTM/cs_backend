@@ -81,17 +81,6 @@ export const patchReel: Handler = (req, res) => {
 	// 	});
 };
 
-export const initStorage: Handler = (req, res) => {
-	if (req.body.pk) {
-		storage
-			.initialiseStorage(req.body.pk)
-			.then((resp: StorageResult) => res.status(resp.status).json(resp.data))
-			.catch((e: AxiosError) =>
-				res.status(e.response?.status || 400).json(e.response?.data),
-			);
-	} else res.status(400).json("No pk defined!");
-};
-
 export const printLabel: Handler = (req, res) => {
 	S.createLabel(req.body.pk);
 	//TODO: Check for error

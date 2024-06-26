@@ -11,7 +11,7 @@ export const updateMode: Handler = (req, res) => {
 			.then((resp: StorageResult) => {
 				res.status(resp.status).json(resp);
 			})
-			.catch((error: AxiosError) => {
+			.catch((error: StorageResult) => {
 				res.status(error.status || 500).json(error);
 			});
 	} else res.status(400).json("Data incorrect!");

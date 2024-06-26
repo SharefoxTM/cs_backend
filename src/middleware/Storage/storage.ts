@@ -7,6 +7,7 @@ const initReels = (reels: string[]) => {
 	let data = new Array<Object>();
 	let [ip, shelve, slot, width] = reels[0].split("/");
 	let index = 0;
+
 	reels.map((path) => {
 		if (path !== undefined) {
 			[ip, shelve, slot, width] = path.split("/");
@@ -21,13 +22,17 @@ const initReels = (reels: string[]) => {
 
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
-		socket.connect(5050, ip, function () {
-			socket.write(JSON.stringify({ mode: "put", data: data }));
-		});
+		try {
+			socket.connect(5050, ip, function () {
+				socket.write(JSON.stringify({ mode: "put", data: data }));
+			});
+		} catch (error) {
+			socket.destroy();
+			reject(error);
+		}
 
 		socket.on("data", (data) => {
 			const result = S.checkData(data);
-			console.log(result);
 			socket.destroy();
 			resolve(result);
 		});
@@ -120,7 +125,7 @@ const updateMode = (ip: string, mode: string): Promise<StorageResult> => {
 
 		socket.on("error", (error) => {
 			socket.destroy();
-			reject(error);
+			reject({ status: 500, data: "Time-out" });
 		});
 	});
 };
@@ -150,19 +155,47 @@ const initialiseStorage = (storagePk: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		S.getShelvePKs(storagePk)
 			.then((shelvePKs: string[]) => {
+				if (shelvePKs.length === 0) {
+					resolve({ status: 200, data: "No shelves found" });
+					return;
+				}
+
 				S.getSlotPKs(shelvePKs)
 					.then((slotPKs: string[]) => {
+						if (slotPKs.length === 0) {
+							resolve({ status: 200, data: "No slots found" });
+							return;
+						}
+
 						S.getWidthPathstrings(slotPKs.flat(1))
 							.then((paths: string[]) => {
+								if (paths.length === 0) {
+									resolve({ status: 200, data: "No paths found" });
+									return;
+								}
+
 								paths = paths.flat(1);
-								initReels(paths);
-								resolve({ status: 200, data: "init success" });
+
+								initReels(paths)
+									.then((result: StorageResult) => {
+										resolve({ status: 200, data: "init success" });
+									})
+									.catch((e: AxiosError) => {
+										console.log(e);
+										reject({ status: 500, data: "Time-out: storage" });
+									});
 							})
-							.catch((e: AxiosError) => reject(e));
+							.catch(() => {
+								reject({ status: 500, data: "Time-out: InvenTree" });
+							});
 					})
-					.catch((e: AxiosError) => reject(e));
+					.catch(() => {
+						reject({ status: 500, data: "Time-out: InvenTree" });
+					});
 			})
-			.catch((e: AxiosError) => reject(e));
+			.catch(() => {
+				reject({ status: 500, data: "Time-out: InvenTree" });
+			});
 	});
 };
 
