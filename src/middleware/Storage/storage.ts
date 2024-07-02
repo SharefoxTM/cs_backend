@@ -21,6 +21,10 @@ const initReels = (reels: string[]) => {
 	});
 
 	return new Promise<StorageResult>((resolve, reject) => {
+		if (data.length === 0) {
+			resolve({ status: 200, data: "No reels found" });
+			return;
+		}
 		const socket = new net.Socket();
 		try {
 			socket.connect(5050, ip, function () {
