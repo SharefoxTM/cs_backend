@@ -22,3 +22,4 @@ PartRouter.route("/:id")
 	.delete(PartController.deletePart);
 
 PartRouter.route("/:id/:detailTopic").get(PartController.getDetails);
+PartRouter.route("/:id/image").put(PartController.updateThumbnail);

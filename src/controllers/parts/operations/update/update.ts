@@ -4,6 +4,9 @@ import Ajv, { JSONSchemaType } from "ajv";
 import { NewPart } from "../../../../models/Part/NewPart.model";
 import addFormats from "ajv-formats";
 import { inventree } from "../../../../server";
+import multer from "multer";
+import FormData from "form-data";
+import fs from "fs";
 
 const schema: JSONSchemaType<NewPart> = {
 	type: "object",
@@ -78,4 +81,42 @@ export const updatePart: Handler = (req, res) => {
 	} else {
 		res.status(400).json(validate.errors);
 	}
+};
+
+const storage = multer.diskStorage({
+	destination: (req, file, cb) => {
+		cb(null, "../../../../tmp/images/");
+	},
+	filename: (req, file, cb) => {
+		const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+		const extension = "." + file.originalname.split(".").pop();
+		cb(null, file.fieldname + "-" + uniqueSuffix + extension);
+	},
+});
+
+export const updateThumbnail: Handler = (req, res) => {
+	multer({ storage: storage }).single("image")(req, res, () => {
+		if (!req.file) {
+			res.status(400).json({ message: "No file uploaded" });
+			return;
+		}
+
+		const formData = new FormData();
+		formData.append(
+			"image",
+			fs.createReadStream(req.file.destination + req.file.filename),
+		);
+
+		inventree
+			.patch(`api/part/${req.params.id}/`, formData, {
+				headers: {
+					...formData.getHeaders(),
+					"content-type": "multipart/form-data",
+				},
+			})
+			.then((response: AxiosResponse) => res.status(201).json(response.data))
+			.catch((err: AxiosError) =>
+				res.status(err.response?.status || 500).json(err.response?.data),
+			);
+	});
 };
