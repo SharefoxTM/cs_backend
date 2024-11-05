@@ -22,7 +22,6 @@ export const createReel: Handler = (req, res) => {
 				slot: slot.toString(),
 				width: width.toString(),
 			};
-			console.log(locationBody);
 			S.findOrCreateLocation(locationBody)
 				.then((location: number) => {
 					const body = {

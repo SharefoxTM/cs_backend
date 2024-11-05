@@ -137,7 +137,6 @@ const updateMode = (ip: string, mode: string): Promise<StorageResult> => {
 const getStatus = (ip: string, row: string): Promise<StorageResult> => {
 	return new Promise<StorageResult>((resolve, reject) => {
 		const socket = new net.Socket();
-		console.log({ ip, row });
 		socket.connect(5050, ip, function () {
 			socket.write(JSON.stringify({ mode: "status", data: { row: row } }));
 		});
@@ -185,7 +184,6 @@ const initialiseStorage = (storagePk: string): Promise<StorageResult> => {
 										resolve({ status: 200, data: "init success" });
 									})
 									.catch((e: AxiosError) => {
-										console.log(e);
 										reject({ status: 500, data: "Time-out: storage" });
 									});
 							})

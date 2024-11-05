@@ -93,7 +93,6 @@ export const importParts = (req: any, res: any) => {
 
 	upload(req, res, (err: any) => {
 		if (err) {
-			console.log(err);
 			res.status(500);
 		} else {
 			const file = req.file.buffer;

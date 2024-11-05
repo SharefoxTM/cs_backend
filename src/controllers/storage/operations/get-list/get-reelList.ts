@@ -5,7 +5,6 @@ import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
 import { getPrinters } from "unix-print";
 
-
 export const getReelList: Handler = (req, res) => {
 	inventree
 		.get(
@@ -20,6 +19,7 @@ export const getReelList: Handler = (req, res) => {
 };
 
 export const getPrinterList: Handler = (req, res) => {
-
-	getPrinters().then((resp: any) => res.status(200).json(resp)).catch(console.log);
+	getPrinters()
+		.then((resp: any) => res.status(200).json(resp))
+		.catch(console.log);
 };
