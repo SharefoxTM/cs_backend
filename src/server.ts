@@ -16,7 +16,13 @@ app.get("/", (req: any, res: any) => {
 
 export const inventree = axios.create({
 	baseURL: process.env.DB_HOST,
-	headers: { Authorization: process.env.DB_TOKEN },
+	headers: { Authorization: "Token " + process.env.DB_TOKEN },
+	proxy: {
+		auth: { username: process.env.DB_PROXY_USER!, password: process.env.DB_PROXY_PASS! },
+		host: process.env.DB_PROXY_HOST!,
+		port: parseInt(process.env.DB_PROXY_PORT!),
+		protocol: "http"
+	}
 });
 export const selfAccess = axios.create({
 	baseURL: process.env.BE_SELF,
