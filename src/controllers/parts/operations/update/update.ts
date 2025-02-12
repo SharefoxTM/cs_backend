@@ -1,7 +1,7 @@
 import { Handler, Response } from "express";
 import { AxiosError, AxiosResponse } from "axios";
 import Ajv, { JSONSchemaType } from "ajv";
-import { NewPart } from "../../../../models/Part/NewPart.model";
+import { NewPart } from "../../../../models/Part.model";
 import addFormats from "ajv-formats";
 import { inventree } from "../../../../server";
 import multer from "multer";

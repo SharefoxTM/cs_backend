@@ -1,12 +1,11 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import Map from "../../../../helpers/mapItems.helper";
-import { Part } from "../../../../models/Part.model";
 import { inventree } from "../../../../server";
 import {
 	APIPaginationPart,
 	APIPart,
-	PartQuery,
+	Part,
 } from "../../../../models/Part.model";
 import { ajv } from "../../../../middleware/Ajv/validator";
 

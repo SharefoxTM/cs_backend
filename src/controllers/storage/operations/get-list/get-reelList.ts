@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
-import { APIStockLocation } from "../../../../models/Stock/APIStockLocation.model";
+import { APIStockLocation } from "../../../../models/Stock.model";
 import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
 import { getPrinters } from "unix-print";

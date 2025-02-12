@@ -1,7 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { StorageResult } from "../../models/StorageResult.model";
-import { APILocationDetail } from "../../models/Location/APILocationDetail.model";
-import { APILocation } from "../../models/Location.model";
+import { APILocationDetail, APILocation } from "../../models/Location.model";
 import { inventree, selfAccess } from "../../server";
 import { print } from "unix-print";
 import Fs from "fs";

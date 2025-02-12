@@ -1,7 +1,6 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
-import { APIStockLocation } from "../../../../models/Stock/APIStockLocation.model";
-import { MovingStock } from "../../../../models/Stock/MovingStock.model";
+import { APIStockLocation, MovingStock } from "../../../../models/Stock.model";
 import storage from "../../../../middleware/Storage/storage";
 import { inventree, selfAccess } from "../../../../server";
 import validator from "../../../../helpers/validateItems.helper";

@@ -1,24 +1,21 @@
-import { APICategory } from "../models/Category/APICategory.model";
-import { CategoryTree } from "../models/Category/CategoryTree.model";
-import { Part } from "../models/Part.model";
-import { APIPart } from "../models/Part/APIPart.model";
-import { APIPartStock } from "../models/Stock/APIPartStock.model";
-import { PartStock } from "../models/Stock/PartStock.model";
-import { APIBuildOrder } from "../models/BuildOrder/APIBuildOrder.model";
-import { BuildOrder } from "../models/BuildOrder.model";
-import { APIUsedIn } from "../models/UsedIn/APIUsedIn.model";
-import { UsedIn } from "../models/UsedIn.model";
-import { APIStockLocation } from "../models/Stock/APIStockLocation.model";
-import { MovingStock } from "../models/Stock/MovingStock.model";
-import { APILocation } from "../models/Location.model";
-import { APILocationDetail } from "../models/Location/APILocationDetail.model";
-import { APISupplier } from "../models/Supplier.model";
-import { APISupplierDetail } from "../models/Company/APISupplierDetail.model";
-import validator from "./validateItems.helper";
+import { APICategory, CategoryTree } from "../models/Category.model";
 import {
+	Part,
+	APIPart,
 	APIPaginationPart,
 	PaginationPart,
-} from "../models/Part/PaginationPart.model";
+} from "../models/Part.model";
+import {
+	APIPartStock,
+	PartStock,
+	APIStockLocation,
+	MovingStock,
+} from "../models/Stock.model";
+import { APIBuildOrder, BuildOrder } from "../models/BuildOrder.model";
+import { APIUsedIn, UsedIn } from "../models/UsedIn.model";
+import { APILocation, APILocationDetail } from "../models/Location.model";
+import { APISupplier, APISupplierDetail } from "../models/Supplier.model";
+import validator from "./validateItems.helper";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({
