@@ -1,0 +1,10 @@
+{
+	"type": "object",
+	"properties": {
+		"part": { "type": "number" },
+		"template": { "type": "number" },
+		"data": { "type": "string" }
+	},
+	"required": ["part", "template", "data"],
+	"additionalProperties": false
+}
