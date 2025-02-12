@@ -1,7 +1,7 @@
 import { Handler } from "express";
 import { inventree } from "../../../../server";
 import { AxiosError, AxiosResponse } from "axios";
-import { APIStock } from "../../../../models/Stock/APIStock.model";
+import { APIStock } from "../../../../models/Stock.model";
 
 export const setMoving: Handler = (req, res) => {
 	inventree

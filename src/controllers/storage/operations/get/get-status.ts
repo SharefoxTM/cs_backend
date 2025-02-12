@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { Handler } from "express";
 import storage from "../../../../middleware/Storage/storage";
-import { StorageResult } from "../../../../models/Storage/StorageResult.model";
+import { StorageResult } from "../../../../models/StorageResult.model";
 
 export const getStatus: Handler = (req, res) => {
 	storage
@@ -13,4 +13,3 @@ export const getStatus: Handler = (req, res) => {
 			res.status(err.response?.status || 500).json(err),
 		);
 };
-

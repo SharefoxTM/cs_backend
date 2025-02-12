@@ -1,9 +1,13 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
-import { APIPart } from "../../../../models/Part/APIPart.model";
 import Map from "../../../../helpers/mapItems.helper";
-import { Part } from "../../../../models/Part/Part.model";
+import { Part } from "../../../../models/Part.model";
 import { inventree } from "../../../../server";
+import {
+	APIPaginationPart,
+	APIPart,
+	PartQuery,
+} from "../../../../models/Part.model";
 
 export const getAllParts: Handler = (req, res) => {
 	inventree

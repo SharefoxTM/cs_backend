@@ -1,6 +1,6 @@
 import { Handler } from "express";
 import { AxiosError, AxiosResponse } from "axios";
-import { APIPart } from "../../../../models/Part/APIPart.model";
+import { APIPart } from "../../../../models/Part.model";
 import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
 

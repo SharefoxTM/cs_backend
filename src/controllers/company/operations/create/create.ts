@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import Ajv, { JSONSchemaType } from "ajv";
-import { NewSupplierPart } from "../../../../models/Company/NewSupplierPart.model";
+import { NewSupplierPart } from "../../../../models/SupplierPart.model";
 import { inventree } from "../../../../server";
 
 const schema: JSONSchemaType<NewSupplierPart> = {

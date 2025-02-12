@@ -1,5 +1,5 @@
 import net from "net";
-import { StorageResult } from "../../models/Storage/StorageResult.model";
+import { StorageResult } from "../../models/StorageResult.model";
 import S from "../../controllers/storage/resources";
 import { AxiosError } from "axios";
 

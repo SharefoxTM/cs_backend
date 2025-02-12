@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
-import { APISupplierPart } from "../../../../models/Company/APISupplierPart.model";
-import { APISupplier } from "../../../../models/Company/APISupplier.model";
+import { APISupplierPart } from "../../../../models/SupplierPart.model";
+import { APISupplier } from "../../../../models/Supplier.model";
 import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
 

@@ -1,6 +1,6 @@
 import { Handler } from "express";
 import storage from "../../../../middleware/Storage/storage";
-import { StorageResult } from "../../../../models/Storage/StorageResult.model";
+import { StorageResult } from "../../../../models/StorageResult.model";
 import S from "../../resources";
 import { inventree, selfAccess } from "../../../../server";
 import { AxiosError, AxiosResponse } from "axios";

@@ -1,6 +1,6 @@
 import { Handler } from "express";
 import storage from "../../../../middleware/Storage/storage";
-import { StorageResult } from "../../../../models/Storage/StorageResult.model";
+import { StorageResult } from "../../../../models/StorageResult.model";
 import { AxiosError } from "axios";
 
 export const updateMode: Handler = (req, res) => {

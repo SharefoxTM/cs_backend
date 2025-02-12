@@ -5,7 +5,7 @@ import { MovingStock } from "../../../../models/Stock/MovingStock.model";
 import storage from "../../../../middleware/Storage/storage";
 import { inventree, selfAccess } from "../../../../server";
 import validator from "../../../../helpers/validateItems.helper";
-import { StorageResult } from "../../../../models/Storage/StorageResult.model";
+import { StorageResult } from "../../../../models/StorageResult.model";
 
 const getLowestAvailable = (
 	apiloc: APIStockLocation[],

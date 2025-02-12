@@ -1,5 +1,5 @@
 import { Handler } from "express";
-import { APILocation } from "../../../../models/Location/APILocation.model";
+import { APILocation } from "../../../../models/Location.model";
 import { AxiosError, AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";

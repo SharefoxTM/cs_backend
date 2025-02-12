@@ -1,11 +1,8 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
-import { NewPart } from "../../../../models/Part/NewPart.model";
 import Ajv, { JSONSchemaType } from "ajv";
 import addFormats from "ajv-formats";
 import { inventree, selfAccess } from "../../../../server";
-import { APIPart } from "../../../../models/Part/APIPart.model";
-import { NewParameter } from "../../../../models/Part/NewParameter.model";
 
 const schema: JSONSchemaType<NewPart> = {
 	type: "object",
@@ -66,6 +63,7 @@ const schema: JSONSchemaType<NewPart> = {
 const ajv = new Ajv();
 addFormats(ajv);
 const validate = ajv.compile(schema);
+import { APIPart } from "../../../../models/Part.model";
 
 export const createPart: Handler = (req, res) => {
 	if (validate(req.body)) {

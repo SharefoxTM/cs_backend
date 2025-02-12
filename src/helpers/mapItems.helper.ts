@@ -1,22 +1,24 @@
-import { Request } from "express";
 import { APICategory } from "../models/Category/APICategory.model";
 import { CategoryTree } from "../models/Category/CategoryTree.model";
-import { PartQuery } from "../models/Part/PartQuery.model";
-import { Part } from "../models/Part/Part.model";
+import { Part } from "../models/Part.model";
 import { APIPart } from "../models/Part/APIPart.model";
 import { APIPartStock } from "../models/Stock/APIPartStock.model";
 import { PartStock } from "../models/Stock/PartStock.model";
 import { APIBuildOrder } from "../models/BuildOrder/APIBuildOrder.model";
-import { BuildOrder } from "../models/BuildOrder/BuildOrder.model";
+import { BuildOrder } from "../models/BuildOrder.model";
 import { APIUsedIn } from "../models/UsedIn/APIUsedIn.model";
-import { UsedIn } from "../models/UsedIn/UsedIn.model";
+import { UsedIn } from "../models/UsedIn.model";
 import { APIStockLocation } from "../models/Stock/APIStockLocation.model";
 import { MovingStock } from "../models/Stock/MovingStock.model";
-import { APILocation } from "../models/Location/APILocation.model";
+import { APILocation } from "../models/Location.model";
 import { APILocationDetail } from "../models/Location/APILocationDetail.model";
-import { APISupplier } from "../models/Company/APISupplier.model";
+import { APISupplier } from "../models/Supplier.model";
 import { APISupplierDetail } from "../models/Company/APISupplierDetail.model";
 import validator from "./validateItems.helper";
+import {
+	APIPaginationPart,
+	PaginationPart,
+} from "../models/Part/PaginationPart.model";
 
 const mapTree = (categories: APICategory): CategoryTree => {
 	const catTree: CategoryTree = categories.map((category) => ({

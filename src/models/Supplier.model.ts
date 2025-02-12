@@ -1,4 +1,5 @@
-import { APIAddress } from "../Location/APIAddress.model";
+import { APIAddress } from "./Location.model";
+import { APICurrency } from "./Utils.model";
 
 export type APISupplier = {
 	pk: number;
@@ -9,7 +10,7 @@ export type APISupplier = {
 	phone: string;
 	address: string;
 	email: string;
-	currency: "AUD" | "CAD" | "CNY" | "EUR" | "GBP" | "JPY" | "NZD" | "USD";
+	currency: APICurrency;
 	contact: string;
 	link: string;
 	image: string;
@@ -21,4 +22,12 @@ export type APISupplier = {
 	parts_manufactured: number;
 	address_count: number;
 	primary_address: APIAddress;
+};
+
+export type APISupplierDetail = {
+	pk: number;
+	url: string;
+	name: string;
+	description: string;
+	image: string;
 };

@@ -1,13 +1,13 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { Handler } from "express";
 import { inventree } from "../../../../server";
-import { APILocation } from "../../../../models/Location/APILocation.model";
 import Ajv, { JSONSchemaType } from "ajv";
 import addFormats from "ajv-formats";
 import {
+	APILocation,
 	NewLocation,
 	NewStorage,
-} from "../../../../models/Location/NewLocation.model";
+} from "../../../../models/Location.model";
 
 const newStorage: JSONSchemaType<NewStorage> = {
 	type: "object",

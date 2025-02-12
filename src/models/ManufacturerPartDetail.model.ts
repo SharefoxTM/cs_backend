@@ -1,4 +1,4 @@
-import { APIManufacturerDetail } from "./APIManufacturerDetail.model";
+import { APIManufacturerDetail } from "./ManufacturerDetail.model";
 
 export type APIManufacturerPartDetail = {
 	pk: number;

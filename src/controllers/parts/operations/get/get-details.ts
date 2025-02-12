@@ -1,10 +1,10 @@
 import { Handler } from "express";
 import { AxiosError, AxiosResponse } from "axios";
 import Map from "../../../../helpers/mapItems.helper";
-import { APIPartParameter } from "../../../../models/Parameters/APIPartParameter.model";
-import { APIPartStock } from "../../../../models/Stock/APIPartStock.model";
-import { APIBuildOrder } from "../../../../models/BuildOrder/APIBuildOrder.model";
-import { APIUsedIn } from "../../../../models/UsedIn/APIUsedIn.model";
+import { APIPartParameter } from "../../../../models/Parameter.model";
+import { APIPartStock } from "../../../../models/Stock.model";
+import { APIBuildOrder } from "../../../../models/BuildOrder.model";
+import { APIUsedIn } from "../../../../models/UsedIn.model";
 import { inventree } from "../../../../server";
 // import { APIPartInternalPrice } from "../../../../models/Part/APIPartInternalPrice.model";
 // import { APIOrderPOLine } from "../../../../models/Order/APIOrderPOLine.model";

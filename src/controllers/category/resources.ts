@@ -1,4 +1,4 @@
-import { APICategory } from "../../models/Category/APICategory.model";
+import { APICategory } from "../../models/Category.model";
 
 const buildTree = (nodes: APICategory, parent: number | null): APICategory => {
 	return nodes
