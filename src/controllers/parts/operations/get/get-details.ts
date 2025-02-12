@@ -111,6 +111,6 @@ export const getDetails: Handler = (req, res) => {
 		// 	break;
 
 		default:
-			throw new Error("No/wrong topic provided.");
+			res.status(400).json({ error: "No/wrong topic provided." });
 	}
 };

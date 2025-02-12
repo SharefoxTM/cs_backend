@@ -21,10 +21,10 @@ export const deleteCategory: Handler = (req, res) => {
 			res.status(204);
 		})
 		.catch((err: AxiosError) =>
-			res.status(err.response?.status || 500).json(
-				{ message: (err.response?.data as { detail: string }).detail } || {
-					message: "Internal server error",
-				},
-			),
+			res.status(err.response?.status || 500).json({
+				message:
+					(err.response?.data as { detail: string })?.detail ||
+					"Internal server error",
+			}),
 		);
 };

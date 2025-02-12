@@ -5,9 +5,6 @@ import Map from "../../../../helpers/mapItems.helper";
 import { inventree } from "../../../../server";
 
 export const getPart: Handler = (req, res) => {
-	if (!req.params.id) {
-		throw new Error("Invalid id");
-	}
 	inventree
 		.get(`api/part/${req.params.id}/`)
 		.then((response: AxiosResponse<APIPart>) => {
