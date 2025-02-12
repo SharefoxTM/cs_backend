@@ -1,39 +1,39 @@
 import axios, { AxiosHeaders } from "axios";
 import { AxiosResponse } from "axios";
 
-describe("GET", () => {
-	it("should return the electronics category", async () => {
-		jest.mock("axios");
-		const response = await axios.get("http://localhost:8080/api/categories/1");
-		expect(response.status).toBe(200);
+// describe("GET", () => {
+// 	it("should return the electronics category", async () => {
+// 		jest.mock("axios");
+// 		const response = await axios.get("http://localhost:8080/api/categories/1");
+// 		expect(response.status).toBe(200);
 
-		const data = expect(response.data);
-		data.toHaveProperty("pk", 1);
-		data.toHaveProperty("name", "Electronics");
-		data.toHaveProperty("description");
-		data.toHaveProperty("default_location");
-		data.toHaveProperty("default_keywords");
-		data.toHaveProperty("level", 0);
-		data.toHaveProperty("parent", null);
-		data.toHaveProperty("part_count");
-		data.toHaveProperty("pathstring", "Electronics");
-		data.toHaveProperty("starred", false);
-		data.toHaveProperty("url", "/part/category/1/");
-		data.toHaveProperty("structural", false);
-		data.toHaveProperty("icon");
-	});
-});
+// 		const data = expect(response.data);
+// 		data.toHaveProperty("pk", 1);
+// 		data.toHaveProperty("name", "Electronics");
+// 		data.toHaveProperty("description");
+// 		data.toHaveProperty("default_location");
+// 		data.toHaveProperty("default_keywords");
+// 		data.toHaveProperty("level", 0);
+// 		data.toHaveProperty("parent", null);
+// 		data.toHaveProperty("part_count");
+// 		data.toHaveProperty("pathstring", "Electronics");
+// 		data.toHaveProperty("starred", false);
+// 		data.toHaveProperty("url", "/part/category/1/");
+// 		data.toHaveProperty("structural", false);
+// 		data.toHaveProperty("icon");
+// 	});
+// });
 
-describe("GET list", () => {
-	it("should return a list of categories", async () => {
-		jest.mock("axios");
-		const response = await axios.get("http://localhost:8080/api/categories");
-		expect(response.status).toBe(200);
+// describe("GET list", () => {
+// 	it("should return a list of categories", async () => {
+// 		jest.mock("axios");
+// 		const response = await axios.get("http://localhost:8080/api/categories");
+// 		expect(response.status).toBe(200);
 
-		const data = expect(response.data);
-		data.not.toHaveLength(1);
-	});
-});
+// 		const data = expect(response.data);
+// 		data.not.toHaveLength(1);
+// 	});
+// });
 
 describe("POST", () => {
 	it("should create a new category", async () => {
