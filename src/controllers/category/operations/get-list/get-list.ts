@@ -4,10 +4,15 @@ import { APICategory } from "../../../../models/Category.model";
 import { inventree, selfAccess } from "../../../../server";
 import Map from "../../../../helpers/mapItems.helper";
 import resource from "../../resources";
+import { ajv } from "../../../../middleware/Ajv/validator";
 
 export const getAllCategories: Handler = (req, res) => {
+	const validate = ajv.getSchema("GET /categories")!;
+	if (!validate(req.query)) {
+		return res.status(400).json(validate.errors);
+	}
 	inventree
-		.get(`api/part/category/`)
+		.get(`api/part/category/`, { params: req.query })
 		.then((response: AxiosResponse<APICategory>) => {
 			res.json(response.data);
 		})
