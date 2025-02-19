@@ -14,7 +14,6 @@ PartRouter.route("/parameter/template").get(
 PartRouter.route("/parameter/template/:id").get(
 	PartController.getParameterTemplate,
 );
-PartRouter.route("/paginated/").get(PartController.getPaginatedParts);
 
 PartRouter.route("/:id")
 	.get(PartController.getPart)
