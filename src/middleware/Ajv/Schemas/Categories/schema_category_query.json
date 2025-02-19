@@ -1,0 +1,20 @@
+{
+	"type": "object",
+	"properties": {
+		"cascade": { "type": "boolean", "nullable": true },
+		"depth": { "type": "string", "nullable": true },
+		"exclude_tree": { "type": "string", "nullable": true },
+		"limit": { "type": "string", "nullable": true },
+		"name": { "type": "string", "nullable": true },
+		"offset": { "type": "string", "nullable": true },
+		"ordering": { "type": "string", "nullable": true },
+		"parent": { "type": "string", "nullable": true },
+		"search": { "type": "string", "nullable": true },
+		"starred": { "type": "boolean", "nullable": true },
+		"structural": { "type": "boolean", "nullable": true },
+		"top_level": { "type": "boolean", "nullable": true }
+	},
+	"required": [],
+
+	"additionalProperties": false
+}
