@@ -95,8 +95,6 @@ export type APIPaginationPart = {
 
 export type PaginationPart = {
 	count: number;
-	next?: string;
-	previous?: string;
 	results: Array<Part>;
 };
 

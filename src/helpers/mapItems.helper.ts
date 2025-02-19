@@ -11,7 +11,6 @@ import {
 	APIStockLocation,
 	MovingStock,
 } from "../models/Stock.model";
-import { APIBuildOrder, BuildOrder } from "../models/BuildOrder.model";
 import { APIUsedIn, UsedIn } from "../models/UsedIn.model";
 import { APILocation, APILocationDetail } from "../models/Location.model";
 import { APISupplier, APISupplierDetail } from "../models/Supplier.model";
@@ -27,116 +26,6 @@ const mapTree = (categories: APICategory): CategoryTree => {
 	}));
 	return catTree;
 };
-
-// const mapQuery = (req: Request): PartQuery => {
-// 	const query = req.query;
-// 	const mappedQuery: PartQuery = {
-// 		active:
-// 			query.active === undefined ? undefined : query.active ? true : false,
-// 		ancestor: query.ancestor?.toString(),
-// 		assembly:
-// 			query.assembly === undefined ? undefined : query.assembly ? true : false,
-// 		category:
-// 			query.category === undefined
-// 				? undefined
-// 				: parseInt(query.category.toString()),
-// 		component:
-// 			query?.component === undefined
-// 				? undefined
-// 				: query.component
-// 				? true
-// 				: false,
-// 		convert_from: query.convert_from?.toString(),
-// 		created_after: query.created_after?.toString(),
-// 		created_before: query.created_before?.toString(),
-// 		depleted_stock:
-// 			query.depleted_stock === undefined
-// 				? undefined
-// 				: query.depleted_stock
-// 				? true
-// 				: false,
-// 		exclude_tree: query.exclude_tree?.toString(),
-// 		has_ipn:
-// 			query.has_ipn === undefined ? undefined : query.has_ipn ? true : false,
-// 		has_pricing:
-// 			query.has_pricing === undefined
-// 				? undefined
-// 				: query.has_pricing
-// 				? true
-// 				: false,
-// 		has_stock:
-// 			query.has_stock === undefined
-// 				? undefined
-// 				: query.has_stock
-// 				? true
-// 				: false,
-// 		has_units:
-// 			query.has_units === undefined
-// 				? undefined
-// 				: query.has_units
-// 				? true
-// 				: false,
-// 		in_bom_for: query.in_bom_for?.toString(),
-// 		IPN: query.IPN?.toString(),
-// 		IPN_regex: query.IPN_regex?.toString(),
-// 		is_template:
-// 			query.is_template === undefined
-// 				? undefined
-// 				: query.is_template
-// 				? true
-// 				: false,
-// 		low_stock:
-// 			query.low_stock === undefined
-// 				? undefined
-// 				: query.low_stock
-// 				? true
-// 				: false,
-// 		name_regex: query.name_regex?.toString(),
-// 		ordering: query.ordering?.toString(),
-// 		purchaseable:
-// 			query.purchaseable === undefined
-// 				? undefined
-// 				: query.purchaseable
-// 				? true
-// 				: false,
-// 		salable:
-// 			query.salable === undefined ? undefined : query.salable ? true : false,
-// 		search: query.search?.toString(),
-// 		stock_to_build:
-// 			query.stock_to_build === undefined
-// 				? undefined
-// 				: query.stock_to_build
-// 				? true
-// 				: false,
-// 		stocktake:
-// 			query.stocktake === undefined
-// 				? undefined
-// 				: query.stocktake
-// 				? true
-// 				: false,
-// 		tags_name: query.tags_name?.toString(),
-// 		tags_slug: query.tags_slug?.toString(),
-// 		trackable:
-// 			query.trackable === undefined
-// 				? undefined
-// 				: query.trackable
-// 				? true
-// 				: false,
-// 		unallocated_stock:
-// 			query.unallocated_stock === undefined
-// 				? undefined
-// 				: query.unallocated_stock
-// 				? true
-// 				: false,
-// 		variant_of:
-// 			query.variant_of === undefined
-// 				? undefined
-// 				: parseInt(query.variant_of.toString()),
-// 		virtual:
-// 			query?.virtual === undefined ? undefined : query.virtual ? true : false,
-// 	};
-// 	return mappedQuery;
-// };
 
 const mapPart = (apiPart: APIPart): Part => {
 	const part: Part = {
@@ -179,8 +68,6 @@ const mapParts = (apiParts: APIPart[]): Part[] => {
 const mapPaginationParts = (apiParts: APIPaginationPart): PaginationPart => {
 	const paginationParts = {
 		count: apiParts.count,
-		next: apiParts.next,
-		previous: apiParts.previous,
 		results: mapParts(apiParts.results),
 	};
 	return paginationParts;
@@ -220,38 +107,6 @@ const mapStock = (apiPartStock: APIPartStock[]): PartStock[] => {
 		updated: stock.updated,
 	}));
 	return mappedStock;
-};
-
-const mapBuildOrders = (apiBO: APIBuildOrder[]): BuildOrder[] => {
-	const mappedBO: BuildOrder[] = apiBO.map((bo) => ({
-		build: bo.build,
-		install_into: bo.install_into,
-		stock_item: bo.stock_item,
-		quantity: bo.quantity,
-		build_detail: {
-			pk: bo.build_detail.pk,
-			url: bo.build_detail.url,
-			title: bo.build_detail.title,
-			barcode_hash: bo.build_detail.barcode_hash,
-			batch: bo.build_detail.batch,
-			creation_date: bo.build_detail.creation_date,
-			completed: bo.build_detail.completed,
-			completion_date: bo.build_detail.completion_date,
-			destination: bo.build_detail.destination,
-			parent: bo.build_detail.parent,
-			part: bo.build_detail.part,
-			project_code: bo.build_detail.project_code,
-			project_code_detail: bo.build_detail.project_code_detail,
-			reference: bo.build_detail.reference,
-			quantity: bo.build_detail.quantity,
-			status: bo.build_detail.status,
-			status_text: bo.build_detail.status_text,
-			target_date: bo.build_detail.target_date,
-			take_from: bo.build_detail.take_from,
-			priority: bo.build_detail.priority,
-		},
-	}));
-	return mappedBO;
 };
 
 const mapUsedIn = (apiUsedIn: APIUsedIn[]): UsedIn[] => {
@@ -319,12 +174,10 @@ const mapSuppliers = (apiSuppliers: APISupplier[]): APISupplierDetail[] => {
 
 export default {
 	mapTree,
-	// mapQuery,
 	mapPart,
 	mapPaginationParts,
 	mapParts,
 	mapStock,
-	mapBuildOrders,
 	mapUsedIn,
 	mapMovingStock,
 	mapIPs,
